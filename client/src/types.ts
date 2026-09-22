@@ -38,6 +38,7 @@ export interface Settings {
   sleepTargets: { bedtime: string; wakeTime: string; durationHours: number };
   academicCategories: AcademicCategory[];
   recurringTasks: RecurringTask[];
+  expenseReasons: RoutineItem[];
 }
 
 export interface DayAcademics {
@@ -116,6 +117,15 @@ export interface ExatestState {
   history: { date: string; score: number }[];
 }
 
+export interface Expense {
+  id: string;
+  name: string;
+  amount: number;
+  reasonId: string | null;
+  date: string;
+  createdAt: string;
+}
+
 export interface StatsDay {
   date: string;
   overall: number;
@@ -125,6 +135,7 @@ export interface StatsDay {
   sleep: DaySleep;
   hydration: { litersConsumed: number; targetLiters: number };
   academics: DayAcademics;
+  expensesTotal: number;
 }
 
 export interface StatsResponse {

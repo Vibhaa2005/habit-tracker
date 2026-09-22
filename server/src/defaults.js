@@ -43,6 +43,15 @@ const MOVEMENT = [
   { id: 'postDinnerWalk', label: 'Post-dinner walk', enabled: true, order: 1, trackDuration: true },
 ];
 
+const EXPENSE_REASONS = [
+  { id: 'food', label: 'Food', enabled: true, order: 0 },
+  { id: 'transport', label: 'Transport', enabled: true, order: 1 },
+  { id: 'shopping', label: 'Shopping', enabled: true, order: 2 },
+  { id: 'bills', label: 'Bills', enabled: true, order: 3 },
+  { id: 'entertainment', label: 'Entertainment', enabled: true, order: 4 },
+  { id: 'other', label: 'Other', enabled: true, order: 5 },
+];
+
 // Fixed reference Sundays/Fridays used purely as phase anchors for
 // alternate-week recurrence math (does not need to be user-visible).
 const ANCHOR_SUNDAY = '2024-01-07';
@@ -129,6 +138,7 @@ function defaultSettings() {
     sleepTargets: { bedtime: '22:30', wakeTime: '06:00', durationHours: 7.5 },
     academicCategories: ACADEMIC_CATEGORIES,
     recurringTasks: RECURRING_TASKS,
+    expenseReasons: EXPENSE_REASONS,
   };
 }
 
@@ -137,6 +147,7 @@ function defaultDb() {
     settings: defaultSettings(),
     dailyData: {},
     assignments: [],
+    expenses: [],
     exatest: { highestScore: 0, history: [] },
     achievements: {}, // id -> { unlockedAt }
   };

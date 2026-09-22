@@ -5,6 +5,7 @@ import type {
   ExatestState,
   StatsResponse,
   AchievementsResponse,
+  Expense,
 } from './types';
 
 const BASE = '/api';
@@ -45,8 +46,15 @@ export const api = {
   submitExatest: (score: number, date?: string) =>
     request<ExatestState>('/exatest', { method: 'POST', body: JSON.stringify({ score, date }) }),
 
-  getStats: (range: string) => request<StatsResponse>(`/stats?range=${range}`),
+  getStats: (range: string, end?: string) =>
+    request<StatsResponse>(`/stats?range=${range}${end ? `&end=${end}` : ''}`),
   getDayDetail: (date: string) => request<{ date: string; day: DayResponse['day']; completion: DayResponse['completion'] }>(`/day/${date}/detail`),
 
   getAchievements: () => request<AchievementsResponse>('/achievements'),
+
+  getExpenses: () => request<Expense[]>('/expenses'),
+  createExpense: (e: Partial<Expense>) => request<Expense>('/expenses', { method: 'POST', body: JSON.stringify(e) }),
+  updateExpense: (id: string, e: Partial<Expense>) =>
+    request<Expense>(`/expenses/${id}`, { method: 'PUT', body: JSON.stringify(e) }),
+  deleteExpense: (id: string) => request<void>(`/expenses/${id}`, { method: 'DELETE' }),
 };

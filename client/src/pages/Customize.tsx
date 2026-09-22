@@ -160,6 +160,10 @@ export default function Customize() {
         <RecurringTasksEditor tasks={draft.recurringTasks} onChange={(tasks) => persist({ recurringTasks: tasks }, 'recurring')} />
       </SectionCard>
 
+      <SectionCard title="Expense reasons" icon="💰">
+        <RoutineListEditor items={draft.expenseReasons} onChange={(items) => persist({ expenseReasons: items }, 'expenseReasons')} />
+      </SectionCard>
+
       {savingKey && <p className="text-xs text-center text-[var(--color-ink-soft)]">Saving…</p>}
     </div>
   );

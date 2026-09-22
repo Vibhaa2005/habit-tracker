@@ -147,6 +147,61 @@ app.delete(
   })
 );
 
+// ---------- Expenses ----------
+
+app.get(
+  '/api/expenses',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    res.json(db.expenses);
+  })
+);
+
+app.post(
+  '/api/expenses',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    const amount = Number(req.body.amount);
+    if (!req.body.date || !DATE_RE.test(req.body.date)) return res.status(400).json({ error: 'Invalid date' });
+    if (Number.isNaN(amount)) return res.status(400).json({ error: 'Invalid amount' });
+    const expense = {
+      id: uid('exp'),
+      name: req.body.name || 'Untitled expense',
+      amount,
+      reasonId: req.body.reasonId || null,
+      date: req.body.date,
+      createdAt: new Date().toISOString(),
+    };
+    db.expenses.push(expense);
+    await saveDb(db);
+    res.status(201).json(expense);
+  })
+);
+
+app.put(
+  '/api/expenses/:id',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    const idx = db.expenses.findIndex((e) => e.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+    const patch = { ...req.body };
+    if (patch.amount !== undefined) patch.amount = Number(patch.amount);
+    db.expenses[idx] = { ...db.expenses[idx], ...patch, id: db.expenses[idx].id };
+    await saveDb(db);
+    res.json(db.expenses[idx]);
+  })
+);
+
+app.delete(
+  '/api/expenses/:id',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    db.expenses = db.expenses.filter((e) => e.id !== req.params.id);
+    await saveDb(db);
+    res.status(204).end();
+  })
+);
+
 // ---------- Exatest ----------
 
 app.get(
@@ -195,8 +250,17 @@ app.get(
     const range = req.query.range || '3m';
     const days = RANGE_DAYS[range] || 90;
     const db = await loadDb();
-    const end = todayStr();
+    // The server's clock is UTC-based (Date#toISOString always is), which can
+    // be a different calendar day than the browser's local "today" — the
+    // client passes its own local date so the range actually ends on the
+    // user's today instead of the server's.
+    const end = req.query.end && DATE_RE.test(req.query.end) ? req.query.end : todayStr();
     const start = addDays(end, -(days - 1));
+
+    const expensesByDate = {};
+    for (const exp of db.expenses) {
+      expensesByDate[exp.date] = (expensesByDate[exp.date] || 0) + (exp.amount || 0);
+    }
 
     const out = [];
     let cursor = start;
@@ -223,6 +287,7 @@ app.get(
           questionCounts: day.academics.questionCounts || {},
           exatestScore: day.academics.exatestScore || null,
         },
+        expensesTotal: expensesByDate[cursor] || 0,
       });
       cursor = addDays(cursor, 1);
     }
