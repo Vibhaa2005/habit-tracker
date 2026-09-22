@@ -15,11 +15,11 @@ function levelFor(pct: number) {
 
 const LEVEL_COLORS = [
   'var(--color-grey-100)',
-  'var(--color-green-100)',
-  'var(--color-green-300)',
-  'var(--color-green-500)',
-  'var(--color-green-700)',
-  'var(--color-green-900)',
+  'var(--color-heat-1)',
+  'var(--color-heat-2)',
+  'var(--color-heat-3)',
+  'var(--color-heat-4)',
+  'var(--color-heat-5)',
 ];
 
 export function ContributionGrid({ days, onSelectDate }: { days: StatsDay[]; onSelectDate?: (date: string) => void }) {
@@ -97,7 +97,7 @@ export function ContributionGrid({ days, onSelectDate }: { days: StatsDay[]; onS
               </div>
               <div className="flex justify-between">
                 <dt>Water</dt>
-                <dd className="text-[var(--color-ink)] font-medium">{(selected.hydration.waterMl / 1000).toFixed(2)} L</dd>
+                <dd className="text-[var(--color-ink)] font-medium">{selected.hydration.litersConsumed.toFixed(2)} L</dd>
               </div>
               <div className="flex justify-between">
                 <dt>Academic</dt>

@@ -46,7 +46,7 @@ export default function Customize() {
         <div className="grid grid-cols-3 gap-3">
           {(['eggs', 'fruits', 'nuts'] as const).map((key) => (
             <label key={key} className="flex flex-col gap-1">
-              <span className="text-xs capitalize text-[var(--color-ink-soft)]">{key}</span>
+              <span className="text-xs capitalize text-[var(--color-ink-soft)]">{key === 'nuts' ? 'Nuts/Seeds' : key}</span>
               <input
                 type="number"
                 min={0}
@@ -64,22 +64,13 @@ export default function Customize() {
       <SectionCard title="Hydration" icon="💧">
         <div className="grid grid-cols-2 gap-3">
           <label className="flex flex-col gap-1">
-            <span className="text-xs text-[var(--color-ink-soft)]">Bottles per day</span>
+            <span className="text-xs text-[var(--color-ink-soft)]">Daily target (liters)</span>
             <input
               type="number"
               min={0}
-              value={settings.hydration.bottlesPerDay}
-              onChange={(e) => persist({ hydration: { ...settings.hydration, bottlesPerDay: Number(e.target.value) || 0 } }, 'bottlesPerDay')}
-              className="input"
-            />
-          </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-[var(--color-ink-soft)]">Bottle size (ml)</span>
-            <input
-              type="number"
-              min={0}
-              value={settings.hydration.bottleSizeMl}
-              onChange={(e) => persist({ hydration: { ...settings.hydration, bottleSizeMl: Number(e.target.value) || 0 } }, 'bottleSize')}
+              step="0.1"
+              value={settings.hydration.targetLiters}
+              onChange={(e) => persist({ hydration: { targetLiters: Number(e.target.value) || 0 } }, 'targetLiters')}
               className="input"
             />
           </label>

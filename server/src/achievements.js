@@ -58,7 +58,7 @@ function computeAchievementProgress(db) {
       (academics.probabilityQuestions || 0) + (academics.leetcodeQuestions || 0) + (academics.codeforcesQuestions || 0);
 
     const hydration = day.hydration || {};
-    if ((hydration.bottlesConsumed || 0) >= (settings.hydration.bottlesPerDay || 0) && settings.hydration.bottlesPerDay > 0) {
+    if ((hydration.litersConsumed || 0) >= (settings.hydration.targetLiters || 0) && settings.hydration.targetLiters > 0) {
       hydratedDates.push(d);
     }
 

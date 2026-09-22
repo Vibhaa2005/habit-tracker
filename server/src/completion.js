@@ -5,7 +5,7 @@ function emptyDay() {
     morning: {},
     meals: {},
     foodTargets: { eggs: 0, fruits: 0, nuts: 0 },
-    hydration: { bottlesConsumed: 0 },
+    hydration: { litersConsumed: 0 },
     movement: {},
     movementDurations: {},
     night: {},
@@ -65,12 +65,12 @@ function activeItems(settings, day, dateStr) {
     }
   }
 
-  if ((settings.hydration.bottlesPerDay || 0) > 0) {
+  if ((settings.hydration.targetLiters || 0) > 0) {
     items.push({
       section: 'hydration',
       id: 'hydration',
       label: 'Hydration target',
-      completed: (day.hydration.bottlesConsumed || 0) >= settings.hydration.bottlesPerDay,
+      completed: (day.hydration.litersConsumed || 0) >= settings.hydration.targetLiters,
     });
   }
 

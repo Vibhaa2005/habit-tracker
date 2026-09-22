@@ -86,7 +86,7 @@ export function AssignmentsPanel() {
             return (
               <li
                 key={a.id}
-                className={`rounded-xl border p-3 ${overdue ? 'border-[var(--color-red-500)] bg-[#fbeeea]' : 'border-[var(--color-border)]'}`}
+                className={`rounded-xl border p-3 ${overdue ? 'border-[var(--color-red-500)] bg-[var(--color-red-50)]' : 'border-[var(--color-border)]'}`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">

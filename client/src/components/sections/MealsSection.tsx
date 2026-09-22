@@ -5,7 +5,7 @@ import { useApp } from '../../context/AppContext';
 const TARGET_LABELS: Record<'eggs' | 'fruits' | 'nuts', string> = {
   eggs: 'Eggs',
   fruits: 'Fruits',
-  nuts: 'Nuts',
+  nuts: 'Nuts/Seeds',
 };
 
 export function MealsSection() {

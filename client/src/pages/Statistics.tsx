@@ -128,7 +128,7 @@ export default function Statistics() {
           { label: 'Probability', value: `${week.reduce((s, d) => s + d.academics.probabilityQuestions, 0)} questions` },
           { label: 'LeetCode', value: `${week.reduce((s, d) => s + d.academics.leetcodeQuestions, 0)} questions` },
           { label: 'Codeforces', value: `${week.reduce((s, d) => s + d.academics.codeforcesQuestions, 0)} questions` },
-          { label: 'Water', value: `${average(week.map((d) => d.hydration.bottlesConsumed)).toFixed(1)} bottles/day` },
+          { label: 'Water', value: `${average(week.map((d) => d.hydration.litersConsumed)).toFixed(2)} L/day` },
         ]}
       />
 

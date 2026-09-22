@@ -26,7 +26,7 @@ export interface Settings {
   meals: RoutineItem[];
   movement: RoutineItem[];
   foodTargets: { eggs: number; fruits: number; nuts: number };
-  hydration: { bottlesPerDay: number; bottleSizeMl: number };
+  hydration: { targetLiters: number };
   sleepTargets: { bedtime: string; wakeTime: string; durationHours: number };
   academicTargets: { probability: number; leetcode: number; codeforces: number };
   recurringTasks: RecurringTask[];
@@ -50,7 +50,7 @@ export interface DayData {
   morning: Record<string, boolean>;
   meals: Record<string, boolean>;
   foodTargets: { eggs: number; fruits: number; nuts: number };
-  hydration: { bottlesConsumed: number };
+  hydration: { litersConsumed: number };
   movement: Record<string, boolean>;
   movementDurations: Record<string, number>;
   night: Record<string, boolean>;
@@ -117,7 +117,7 @@ export interface StatsDay {
   completedItems: number;
   sections: CompletionSections;
   sleep: DaySleep;
-  hydration: { bottlesConsumed: number; bottleSizeMl: number; waterMl: number };
+  hydration: { litersConsumed: number; targetLiters: number };
   academics: DayAcademics;
 }
 

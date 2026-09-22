@@ -5,34 +5,29 @@ import type { StatsDay } from '../../types';
 import { average } from '../../lib/statsUtils';
 
 export function HydrationStats({ days }: { days: StatsDay[] }) {
-  const withData = days.filter((d) => d.hydration.bottlesConsumed > 0);
+  const withData = days.filter((d) => d.hydration.litersConsumed > 0);
   if (withData.length === 0) {
     return (
       <SectionCard title="Hydration statistics" icon="💧">
         <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
-          No hydration data yet. Log a few bottles to see your trends.
+          No hydration data yet. Log some water to see your trends.
         </p>
       </SectionCard>
     );
   }
 
-  const avgBottles = average(days.map((d) => d.hydration.bottlesConsumed));
-  const avgWater = average(days.map((d) => d.hydration.waterMl)) / 1000;
+  const avgWater = average(days.map((d) => d.hydration.litersConsumed));
   const hydrationCompletionDays = days.filter((d) => d.sections.hydration != null);
   const hydrationCompletion = average(hydrationCompletionDays.map((d) => d.sections.hydration || 0));
 
   const chartData = days.slice(-30).map((d) => ({
     date: format(parseISO(d.date), 'MMM d'),
-    liters: Math.round((d.hydration.waterMl / 1000) * 100) / 100,
+    liters: Math.round(d.hydration.litersConsumed * 100) / 100,
   }));
 
   return (
     <SectionCard title="Hydration statistics" icon="💧">
-      <div className="grid grid-cols-3 gap-3 mb-5">
-        <div>
-          <p className="text-xs text-[var(--color-ink-soft)]">Avg bottles/day</p>
-          <p className="text-lg font-bold text-[var(--color-green-700)]">{avgBottles.toFixed(1)}</p>
-        </div>
+      <div className="grid grid-cols-2 gap-3 mb-5">
         <div>
           <p className="text-xs text-[var(--color-ink-soft)]">Avg water/day</p>
           <p className="text-lg font-bold text-[var(--color-green-700)]">{avgWater.toFixed(2)} L</p>

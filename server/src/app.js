@@ -215,9 +215,8 @@ app.get(
           durationMinutes: day.sleep.durationMinutes,
         },
         hydration: {
-          bottlesConsumed: day.hydration.bottlesConsumed || 0,
-          bottleSizeMl: db.settings.hydration.bottleSizeMl,
-          waterMl: (day.hydration.bottlesConsumed || 0) * db.settings.hydration.bottleSizeMl,
+          litersConsumed: day.hydration.litersConsumed || 0,
+          targetLiters: db.settings.hydration.targetLiters,
         },
         academics: {
           revision: !!day.academics.revision,

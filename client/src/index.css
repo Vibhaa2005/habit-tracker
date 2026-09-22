@@ -3,29 +3,43 @@
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
-  --color-bg: #f6f5f1;
-  --color-surface: #ffffff;
-  --color-surface-muted: #f0efe9;
-  --color-ink: #232420;
-  --color-ink-soft: #5c5d57;
-  --color-border: #e6e4dc;
+  /* Dark theme (default and only theme) — warm dark neutrals, not pure black */
+  --color-bg: #15160f;
+  --color-surface: #1d1f16;
+  --color-surface-muted: #262820;
+  --color-ink: #edefe4;
+  --color-ink-soft: #9a9d8c;
+  --color-border: #34362a;
 
-  --color-grey-100: #eceae3;
-  --color-grey-300: #d8d5ca;
+  --color-grey-100: #262820;
+  --color-grey-300: #454736;
 
-  --color-green-50: #eaf3ea;
-  --color-green-100: #cfe6cf;
-  --color-green-300: #93c79a;
+  /* Badge / button greens (unrelated to the contribution-grid heat scale below) */
+  --color-green-50: #cdecd2;
+  --color-green-100: #bfe8c5;
+  --color-green-300: #7fbf8a;
   --color-green-500: #4f9e5c;
-  --color-green-700: #2f7a3d;
+  --color-green-700: #5cc471;
   --color-green-900: #1c4a26;
 
-  --color-amber-500: #c98a3b;
-  --color-red-500: #c0563f;
+  /* Contribution-grid heat scale: dark/muted (low) -> bright/saturated (high) */
+  --color-heat-1: #1e3a22;
+  --color-heat-2: #2f5c37;
+  --color-heat-3: #46864f;
+  --color-heat-4: #5fb26c;
+  --color-heat-5: #7fe38f;
+
+  --color-amber-500: #d99a4f;
+  --color-red-500: #e0654a;
+  --color-red-50: #3a2420;
 }
 
 html, body, #root {
   height: 100%;
+}
+
+:root {
+  color-scheme: dark;
 }
 
 body {

@@ -20,15 +20,14 @@ const MORNING_ROUTINE = [
 ];
 
 const NIGHT_ROUTINE = [
-  { id: 'postDinnerWalk', label: 'Post-dinner walk', enabled: true, order: 0 },
-  { id: 'brushTeeth', label: 'Brush teeth', enabled: true, order: 1 },
-  { id: 'tongueCleaning', label: 'Tongue cleaning', enabled: true, order: 2 },
-  { id: 'bathing', label: 'Bathing', enabled: true, order: 3 },
-  { id: 'moisturise', label: 'Moisturising', enabled: true, order: 4 },
-  { id: 'hairCare', label: 'Hair care', enabled: true, order: 5 },
-  { id: 'soakNuts', label: 'Soak nuts', enabled: true, order: 6 },
-  { id: 'meditation', label: 'Meditation / Breathing', enabled: true, order: 7 },
-  { id: 'sleep', label: 'Sleep', enabled: true, order: 8 },
+  { id: 'brushTeeth', label: 'Brush teeth', enabled: true, order: 0 },
+  { id: 'tongueCleaning', label: 'Tongue cleaning', enabled: true, order: 1 },
+  { id: 'bathing', label: 'Bathing', enabled: true, order: 2 },
+  { id: 'moisturise', label: 'Moisturising', enabled: true, order: 3 },
+  { id: 'hairCare', label: 'Hair care', enabled: true, order: 4 },
+  { id: 'soakNuts', label: 'Soak nuts', enabled: true, order: 5 },
+  { id: 'meditation', label: 'Meditation / Breathing', enabled: true, order: 6 },
+  { id: 'sleep', label: 'Sleep', enabled: true, order: 7 },
 ];
 
 const MEALS = [
@@ -110,7 +109,7 @@ function defaultSettings() {
     meals: MEALS,
     movement: MOVEMENT,
     foodTargets: { eggs: 2, fruits: 2, nuts: 1 },
-    hydration: { bottlesPerDay: 8, bottleSizeMl: 500 },
+    hydration: { targetLiters: 2.5 },
     sleepTargets: { bedtime: '22:30', wakeTime: '06:00', durationHours: 7.5 },
     academicTargets: { probability: 10, leetcode: 3, codeforces: 2 },
     recurringTasks: RECURRING_TASKS,
