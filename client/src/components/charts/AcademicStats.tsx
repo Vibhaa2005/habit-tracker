@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { format, parseISO } from 'date-fns';
-import { SectionCard } from '../ui/SectionCard';
+import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { AcademicCategory, ExatestState, StatsDay } from '../../types';
 import { lastNDays } from '../../lib/statsUtils';
 
@@ -26,7 +26,7 @@ export function AcademicStats({
   const scoreHistory = (exatest?.history || []).map((h) => ({ date: format(parseISO(h.date), 'MMM d'), score: h.score }));
 
   return (
-    <SectionCard title="Academic statistics" icon="📚">
+    <CollapsibleCard title="Academic statistics" icon="📚">
       <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">
         Questions solved this week
       </p>
@@ -73,6 +73,6 @@ export function AcademicStats({
       ) : (
         <p className="text-sm text-[var(--color-ink-soft)]">Log a couple of Exatest scores to see your progression.</p>
       )}
-    </SectionCard>
+    </CollapsibleCard>
   );
 }

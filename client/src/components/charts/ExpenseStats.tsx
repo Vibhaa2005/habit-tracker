@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { format, parseISO } from 'date-fns';
-import { SectionCard } from '../ui/SectionCard';
+import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { Expense, RoutineItem, StatsDay } from '../../types';
 import { average } from '../../lib/statsUtils';
 
@@ -31,11 +31,11 @@ export function ExpenseStats({
 
   if (inRange.length === 0) {
     return (
-      <SectionCard title="Expense statistics" icon="💰">
+      <CollapsibleCard title="Expense statistics" icon="💰">
         <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
           No expenses logged in this range yet. Add some on the Expenses page to see your trends.
         </p>
-      </SectionCard>
+      </CollapsibleCard>
     );
   }
 
@@ -57,7 +57,7 @@ export function ExpenseStats({
   const pieData = [...byReason.entries()].map(([name, value]) => ({ name, value: Math.round(value * 100) / 100 }));
 
   return (
-    <SectionCard title="Expense statistics" icon="💰">
+    <CollapsibleCard title="Expense statistics" icon="💰" summary={<span className="text-xs text-[var(--color-ink-soft)]">{total.toFixed(2)} in range</span>}>
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div>
           <p className="text-xs text-[var(--color-ink-soft)]">Total in range</p>
@@ -95,6 +95,6 @@ export function ExpenseStats({
           </PieChart>
         </ResponsiveContainer>
       </div>
-    </SectionCard>
+    </CollapsibleCard>
   );
 }

@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { format, parseISO } from 'date-fns';
-import { SectionCard } from '../ui/SectionCard';
+import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { StatsDay } from '../../types';
 import { average, formatMinutes, timeConsistency, daysWithSleep } from '../../lib/statsUtils';
 
@@ -24,11 +24,11 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
 
   if (tracked.length < 2) {
     return (
-      <SectionCard title="Sleep statistics" icon="😴">
+      <CollapsibleCard title="Sleep statistics" icon="😴">
         <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
           Track your sleep for a few more days to see your trends.
         </p>
-      </SectionCard>
+      </CollapsibleCard>
     );
   }
 
@@ -51,7 +51,7 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
   const bedtimeConsistency = timeConsistency(tracked.filter((d) => d.sleep.bedtime).map((d) => d.sleep.bedtime as string));
 
   return (
-    <SectionCard title="Sleep statistics" icon="😴">
+    <CollapsibleCard title="Sleep statistics" icon="😴" summary={<span className="text-xs text-[var(--color-ink-soft)]">avg {formatMinutes(avgDuration)}</span>}>
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div>
           <p className="text-xs text-[var(--color-ink-soft)]">Average sleep</p>
@@ -101,6 +101,6 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
           </LineChart>
         </ResponsiveContainer>
       </div>
-    </SectionCard>
+    </CollapsibleCard>
   );
 }

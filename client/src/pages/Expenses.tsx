@@ -9,6 +9,12 @@ function todayStr() {
   return format(new Date(), 'yyyy-MM-dd');
 }
 
+function daysAgoStr(n: number) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return format(d, 'yyyy-MM-dd');
+}
+
 const emptyForm = { name: '', amount: '', reasonId: '', date: todayStr() };
 
 export default function Expenses() {
@@ -47,7 +53,15 @@ export default function Expenses() {
       }));
   }, [expenses]);
 
-  const allTimeTotal = useMemo(() => (expenses ?? []).reduce((s, e) => s + e.amount, 0), [expenses]);
+  const weekTotal = useMemo(() => {
+    const cutoff = daysAgoStr(6);
+    return (expenses ?? []).filter((e) => e.date >= cutoff).reduce((s, e) => s + e.amount, 0);
+  }, [expenses]);
+
+  const monthTotal = useMemo(() => {
+    const cutoff = daysAgoStr(29);
+    return (expenses ?? []).filter((e) => e.date >= cutoff).reduce((s, e) => s + e.amount, 0);
+  }, [expenses]);
 
   function startEdit(e: Expense) {
     setEditingId(e.id);
@@ -94,9 +108,15 @@ export default function Expenses() {
           <h1 className="text-xl font-semibold">Expenses</h1>
           <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">{expenses.length} logged</p>
         </div>
-        <div className="text-right">
-          <p className="text-xs text-[var(--color-ink-soft)]">All-time total</p>
-          <p className="text-2xl font-bold text-[var(--color-green-700)]">{allTimeTotal.toFixed(2)}</p>
+        <div className="flex gap-6">
+          <div className="text-right">
+            <p className="text-xs text-[var(--color-ink-soft)]">This week</p>
+            <p className="text-2xl font-bold text-[var(--color-green-700)]">{weekTotal.toFixed(2)}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-[var(--color-ink-soft)]">This month</p>
+            <p className="text-2xl font-bold text-[var(--color-green-700)]">{monthTotal.toFixed(2)}</p>
+          </div>
         </div>
       </header>
 

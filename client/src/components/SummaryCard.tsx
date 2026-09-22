@@ -1,4 +1,4 @@
-import { SectionCard } from './ui/SectionCard';
+import { CollapsibleCard } from './ui/CollapsibleCard';
 
 export interface SummaryRow {
   label: string;
@@ -7,7 +7,7 @@ export interface SummaryRow {
 
 export function SummaryCard({ title, icon, rows }: { title: string; icon: string; rows: SummaryRow[] }) {
   return (
-    <SectionCard title={title} icon={icon}>
+    <CollapsibleCard title={title} icon={icon}>
       <dl className="grid grid-cols-2 gap-x-4 gap-y-3">
         {rows.map((r) => (
           <div key={r.label}>
@@ -16,6 +16,6 @@ export function SummaryCard({ title, icon, rows }: { title: string; icon: string
           </div>
         ))}
       </dl>
-    </SectionCard>
+    </CollapsibleCard>
   );
 }
