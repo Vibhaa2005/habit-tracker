@@ -9,7 +9,6 @@ import { SummaryCard } from '../components/SummaryCard';
 import { SleepStats } from '../components/charts/SleepStats';
 import { HydrationStats } from '../components/charts/HydrationStats';
 import { AcademicStats } from '../components/charts/AcademicStats';
-import { RoutineStats } from '../components/charts/RoutineStats';
 import { average, formatMinutes, longestStreakAbove, lastNDays } from '../lib/statsUtils';
 
 const RANGES: { key: string; label: string }[] = [
@@ -118,7 +117,6 @@ export default function Statistics() {
       <SleepStats days={days} />
       <HydrationStats days={days} />
       <AcademicStats days={days} exatest={exatest} categories={categories} />
-      <RoutineStats days={days} />
 
       <SummaryCard
         title="This week"
