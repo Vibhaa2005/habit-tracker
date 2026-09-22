@@ -32,6 +32,10 @@
   --color-amber-500: #d99a4f;
   --color-red-500: #e0654a;
   --color-red-50: #3a2420;
+
+  /* Hydration accent — water reads better as blue than green */
+  --color-blue-500: #4f93d9;
+  --color-blue-700: #6bb1f2;
 }
 
 html, body, #root {

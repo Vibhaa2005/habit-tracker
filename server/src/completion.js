@@ -4,7 +4,7 @@ function emptyDay() {
   return {
     morning: {},
     meals: {},
-    foodTargets: { eggs: 0, fruits: 0, nuts: 0 },
+    foodTargets: { eggs: 0, fruits: 0, nuts: false },
     hydration: { litersConsumed: 0 },
     movement: {},
     movementDurations: {},
@@ -12,9 +12,7 @@ function emptyDay() {
     sleep: { bedtime: null, wakeTime: null, durationMinutes: null },
     academics: {
       revision: false,
-      probabilityQuestions: 0,
-      leetcodeQuestions: 0,
-      codeforcesQuestions: 0,
+      questionCounts: {},
     },
     recurringTasks: {},
   };
@@ -53,7 +51,7 @@ function activeItems(settings, day, dateStr) {
   for (const meal of settings.meals.filter((i) => i.enabled)) {
     items.push({ section: 'meals', id: meal.id, label: meal.label, completed: !!day.meals[meal.id] });
   }
-  for (const key of ['eggs', 'fruits', 'nuts']) {
+  for (const key of ['eggs', 'fruits']) {
     const target = settings.foodTargets[key] || 0;
     if (target > 0) {
       items.push({
@@ -64,6 +62,7 @@ function activeItems(settings, day, dateStr) {
       });
     }
   }
+  items.push({ section: 'meals', id: 'nuts_seeds', label: 'Nuts/Seeds', completed: !!day.foodTargets.nuts });
 
   if ((settings.hydration.targetLiters || 0) > 0) {
     items.push({
@@ -82,18 +81,17 @@ function activeItems(settings, day, dateStr) {
     items.push({ section: 'night', id: item.id, label: item.label, completed: !!day.night[item.id] });
   }
 
-  // Academics: revision is always tracked; question categories only count
-  // toward completion once the user has set a target > 0.
+  // Academics: revision is always tracked; question categories are a fully
+  // user-editable list (add/remove/rename/retarget from Customize) and only
+  // count toward completion once a target > 0 is set.
   items.push({ section: 'academics', id: 'revision', label: 'Revision', completed: !!day.academics.revision });
-  for (const key of ['probability', 'leetcode', 'codeforces']) {
-    const target = settings.academicTargets[key] || 0;
-    if (target > 0) {
-      const valueKey = `${key}Questions`;
+  for (const cat of settings.academicCategories.filter((c) => c.enabled)) {
+    if ((cat.target || 0) > 0) {
       items.push({
         section: 'academics',
-        id: key,
-        label: key,
-        completed: (day.academics[valueKey] || 0) >= target,
+        id: cat.id,
+        label: cat.label,
+        completed: (day.academics.questionCounts[cat.id] || 0) >= cat.target,
       });
     }
   }

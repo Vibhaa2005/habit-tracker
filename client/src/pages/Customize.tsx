@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { SectionCard } from '../components/ui/SectionCard';
 import { RoutineListEditor } from '../components/customize/RoutineListEditor';
 import { RecurringTasksEditor } from '../components/customize/RecurringTasksEditor';
+import { AcademicCategoriesEditor } from '../components/customize/AcademicCategoriesEditor';
 import type { Settings } from '../types';
 
 export default function Customize() {
@@ -69,10 +70,10 @@ export default function Customize() {
         <RoutineListEditor items={draft.meals} onChange={(items) => persist({ meals: items }, 'meals')} />
 
         <p className="text-xs text-[var(--color-ink-soft)] mt-4 mb-2">Daily food targets</p>
-        <div className="grid grid-cols-3 gap-3">
-          {(['eggs', 'fruits', 'nuts'] as const).map((key) => (
+        <div className="grid grid-cols-2 gap-3">
+          {(['eggs', 'fruits'] as const).map((key) => (
             <label key={key} className="flex flex-col gap-1">
-              <span className="text-xs capitalize text-[var(--color-ink-soft)]">{key === 'nuts' ? 'Nuts/Seeds' : key}</span>
+              <span className="text-xs capitalize text-[var(--color-ink-soft)]">{key}</span>
               <input
                 type="number"
                 min={0}
@@ -85,6 +86,7 @@ export default function Customize() {
             </label>
           ))}
         </div>
+        <p className="text-xs text-[var(--color-ink-soft)] mt-2">Nuts/Seeds is a plain daily checkbox — no target to set.</p>
       </SectionCard>
 
       <SectionCard title="Hydration" icon="💧">
@@ -147,23 +149,11 @@ export default function Customize() {
         </div>
       </SectionCard>
 
-      <SectionCard title="Academic targets" icon="📚">
-        <div className="grid grid-cols-3 gap-3">
-          {(['probability', 'leetcode', 'codeforces'] as const).map((key) => (
-            <label key={key} className="flex flex-col gap-1">
-              <span className="text-xs capitalize text-[var(--color-ink-soft)]">{key}</span>
-              <input
-                type="number"
-                min={0}
-                value={draft.academicTargets[key]}
-                onChange={(e) =>
-                  persist({ academicTargets: { ...draft.academicTargets, [key]: Number(e.target.value) || 0 } }, `academic_${key}`)
-                }
-                className="input w-full"
-              />
-            </label>
-          ))}
-        </div>
+      <SectionCard title="Academic categories" icon="📚">
+        <AcademicCategoriesEditor
+          items={draft.academicCategories}
+          onChange={(items) => persist({ academicCategories: items }, 'academicCategories')}
+        />
       </SectionCard>
 
       <SectionCard title="Recurring tasks" icon="🧺">

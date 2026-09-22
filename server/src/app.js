@@ -220,9 +220,7 @@ app.get(
         },
         academics: {
           revision: !!day.academics.revision,
-          probabilityQuestions: day.academics.probabilityQuestions || 0,
-          leetcodeQuestions: day.academics.leetcodeQuestions || 0,
-          codeforcesQuestions: day.academics.codeforcesQuestions || 0,
+          questionCounts: day.academics.questionCounts || {},
           exatestScore: day.academics.exatestScore || null,
         },
       });

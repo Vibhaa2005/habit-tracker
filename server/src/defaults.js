@@ -111,6 +111,12 @@ const RECURRING_TASKS = [
   },
 ];
 
+const ACADEMIC_CATEGORIES = [
+  { id: 'probability', label: 'Probability', target: 10, enabled: true, order: 0 },
+  { id: 'leetcode', label: 'LeetCode', target: 3, enabled: true, order: 1 },
+  { id: 'codeforces', label: 'Codeforces', target: 2, enabled: true, order: 2 },
+];
+
 function defaultSettings() {
   return {
     wakeUpTime: '06:00',
@@ -118,10 +124,10 @@ function defaultSettings() {
     nightRoutine: NIGHT_ROUTINE,
     meals: MEALS,
     movement: MOVEMENT,
-    foodTargets: { eggs: 2, fruits: 2, nuts: 1 },
+    foodTargets: { eggs: 2, fruits: 2 },
     hydration: { targetLiters: 2.5 },
     sleepTargets: { bedtime: '22:30', wakeTime: '06:00', durationHours: 7.5 },
-    academicTargets: { probability: 10, leetcode: 3, codeforces: 2 },
+    academicCategories: ACADEMIC_CATEGORIES,
     recurringTasks: RECURRING_TASKS,
   };
 }

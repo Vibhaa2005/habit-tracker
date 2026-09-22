@@ -1,16 +1,24 @@
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { format, parseISO } from 'date-fns';
 import { SectionCard } from '../ui/SectionCard';
-import type { ExatestState, StatsDay } from '../../types';
+import type { AcademicCategory, ExatestState, StatsDay } from '../../types';
 import { lastNDays } from '../../lib/statsUtils';
 
-export function AcademicStats({ days, exatest }: { days: StatsDay[]; exatest: ExatestState | null }) {
+export function AcademicStats({
+  days,
+  exatest,
+  categories,
+}: {
+  days: StatsDay[];
+  exatest: ExatestState | null;
+  categories: AcademicCategory[];
+}) {
   const week = lastNDays(days, 7);
-  const weeklyTotals = [
-    { name: 'Probability', value: week.reduce((s, d) => s + d.academics.probabilityQuestions, 0) },
-    { name: 'LeetCode', value: week.reduce((s, d) => s + d.academics.leetcodeQuestions, 0) },
-    { name: 'Codeforces', value: week.reduce((s, d) => s + d.academics.codeforcesQuestions, 0) },
-  ];
+  const enabledCategories = [...categories].filter((c) => c.enabled).sort((a, b) => a.order - b.order);
+  const weeklyTotals = enabledCategories.map((cat) => ({
+    name: cat.label,
+    value: week.reduce((s, d) => s + (d.academics.questionCounts[cat.id] || 0), 0),
+  }));
 
   const revisionDays = days.filter((d) => d.academics.revision).length;
   const revisionPct = days.length > 0 ? Math.round((revisionDays / days.length) * 100) : 0;

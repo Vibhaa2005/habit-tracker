@@ -8,6 +8,12 @@ import { useApp } from '../context/AppContext';
 import { api } from '../api';
 import type { ExatestState } from '../types';
 
+const CATEGORY_EMOJI: Record<string, string> = {
+  probability: '🎲',
+  leetcode: '💻',
+  codeforces: '⚔️',
+};
+
 export default function Academics() {
   const { settings, dayResponse, patchDay, selectedDate, pushToast } = useApp();
   const [exatest, setExatest] = useState<ExatestState | null>(null);
@@ -79,27 +85,23 @@ export default function Academics() {
 
       <SectionCard title="Daily practice" icon="🧠">
         <div className="divide-y divide-[var(--color-border)]">
-          <DailyCounter
-            emoji="🎲"
-            label="Probability"
-            value={dayResponse.day.academics.probabilityQuestions}
-            target={settings.academicTargets.probability || undefined}
-            onChange={(v) => patchDay({ academics: { probabilityQuestions: v } }, v > 0 ? undefined : undefined)}
-          />
-          <DailyCounter
-            emoji="💻"
-            label="LeetCode"
-            value={dayResponse.day.academics.leetcodeQuestions}
-            target={settings.academicTargets.leetcode || undefined}
-            onChange={(v) => patchDay({ academics: { leetcodeQuestions: v } })}
-          />
-          <DailyCounter
-            emoji="⚔️"
-            label="Codeforces"
-            value={dayResponse.day.academics.codeforcesQuestions}
-            target={settings.academicTargets.codeforces || undefined}
-            onChange={(v) => patchDay({ academics: { codeforcesQuestions: v } })}
-          />
+          {[...settings.academicCategories]
+            .filter((c) => c.enabled)
+            .sort((a, b) => a.order - b.order)
+            .map((cat) => (
+              <DailyCounter
+                key={cat.id}
+                emoji={CATEGORY_EMOJI[cat.id] || '📝'}
+                label={cat.label}
+                value={dayResponse.day.academics.questionCounts[cat.id] || 0}
+                target={cat.target || undefined}
+                onChange={(v) =>
+                  patchDay({
+                    academics: { questionCounts: { ...dayResponse.day.academics.questionCounts, [cat.id]: v } },
+                  })
+                }
+              />
+            ))}
         </div>
       </SectionCard>
 

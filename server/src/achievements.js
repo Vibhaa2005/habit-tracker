@@ -54,8 +54,7 @@ function computeAchievementProgress(db) {
 
     const day = dailyData[d] || {};
     const academics = day.academics || {};
-    totalQuestions +=
-      (academics.probabilityQuestions || 0) + (academics.leetcodeQuestions || 0) + (academics.codeforcesQuestions || 0);
+    totalQuestions += Object.values(academics.questionCounts || {}).reduce((a, b) => a + (b || 0), 0);
 
     const hydration = day.hydration || {};
     if ((hydration.litersConsumed || 0) >= (settings.hydration.targetLiters || 0) && settings.hydration.targetLiters > 0) {

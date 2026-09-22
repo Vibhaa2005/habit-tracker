@@ -102,7 +102,7 @@ export function ContributionGrid({ days, onSelectDate }: { days: StatsDay[]; onS
               <div className="flex justify-between">
                 <dt>Academic</dt>
                 <dd className="text-[var(--color-ink)] font-medium">
-                  {selected.academics.probabilityQuestions + selected.academics.leetcodeQuestions + selected.academics.codeforcesQuestions} activities
+                  {Object.values(selected.academics.questionCounts).reduce((a, b) => a + b, 0)} activities
                 </dd>
               </div>
             </dl>

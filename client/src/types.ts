@@ -19,24 +19,30 @@ export interface RecurringTask {
   enabled: boolean;
 }
 
+export interface AcademicCategory {
+  id: string;
+  label: string;
+  target: number;
+  enabled: boolean;
+  order: number;
+}
+
 export interface Settings {
   wakeUpTime: string;
   morningRoutine: RoutineItem[];
   nightRoutine: RoutineItem[];
   meals: RoutineItem[];
   movement: RoutineItem[];
-  foodTargets: { eggs: number; fruits: number; nuts: number };
+  foodTargets: { eggs: number; fruits: number };
   hydration: { targetLiters: number };
   sleepTargets: { bedtime: string; wakeTime: string; durationHours: number };
-  academicTargets: { probability: number; leetcode: number; codeforces: number };
+  academicCategories: AcademicCategory[];
   recurringTasks: RecurringTask[];
 }
 
 export interface DayAcademics {
   revision: boolean;
-  probabilityQuestions: number;
-  leetcodeQuestions: number;
-  codeforcesQuestions: number;
+  questionCounts: Record<string, number>;
   exatestScore?: number | null;
 }
 
@@ -49,7 +55,7 @@ export interface DaySleep {
 export interface DayData {
   morning: Record<string, boolean>;
   meals: Record<string, boolean>;
-  foodTargets: { eggs: number; fruits: number; nuts: number };
+  foodTargets: { eggs: number; fruits: number; nuts: boolean };
   hydration: { litersConsumed: number };
   movement: Record<string, boolean>;
   movementDurations: Record<string, number>;

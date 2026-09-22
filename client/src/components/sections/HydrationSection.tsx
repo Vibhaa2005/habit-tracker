@@ -27,12 +27,12 @@ export function HydrationSection() {
           {consumed.toFixed(2)} <span className="text-[var(--color-ink-soft)] text-base font-normal">/ {target} L</span>
         </span>
       </div>
-      <ProgressBar value={pct} height={8} className="mb-4" />
+      <ProgressBar value={pct} height={8} className="mb-4" color="blue" />
       <div className="flex gap-2">
         <button
           onClick={() => setConsumed(consumed - STEP)}
           disabled={consumed <= 0}
-          className="px-3 py-1.5 rounded-full text-sm border border-[var(--color-border)] text-[var(--color-ink-soft)] hover:bg-[var(--color-surface-muted)] disabled:opacity-40"
+          className="px-3 py-1.5 rounded-full text-sm border border-[var(--color-blue-500)] text-[var(--color-blue-700)] hover:bg-[var(--color-surface-muted)] disabled:opacity-40"
         >
           − 250ml
         </button>
@@ -40,7 +40,7 @@ export function HydrationSection() {
           onClick={() =>
             setConsumed(consumed + STEP, consumed + STEP >= target ? '💧 Hydration goal reached!' : '✓ Water logged')
           }
-          className="px-3 py-1.5 rounded-full text-sm bg-[var(--color-green-500)] text-white hover:bg-[var(--color-green-700)]"
+          className="px-3 py-1.5 rounded-full text-sm bg-[var(--color-blue-500)] text-white hover:bg-[var(--color-blue-700)]"
         >
           + 250ml
         </button>

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
+import { useApp } from '../context/AppContext';
 import type { ExatestState, StatsResponse } from '../types';
 import { SectionCard } from '../components/ui/SectionCard';
 import { ProgressBar } from '../components/ui/ProgressBar';
@@ -19,9 +20,12 @@ const RANGES: { key: string; label: string }[] = [
 ];
 
 export default function Statistics() {
+  const { settings } = useApp();
   const [range, setRange] = useState('3m');
   const [stats, setStats] = useState<StatsResponse | null>(null);
   const [exatest, setExatest] = useState<ExatestState | null>(null);
+  const categories = settings?.academicCategories ?? [];
+  const enabledCategories = [...categories].filter((c) => c.enabled).sort((a, b) => a.order - b.order);
 
   useEffect(() => {
     api.getStats(range).then(setStats);
@@ -57,7 +61,7 @@ export default function Statistics() {
   const fullyDoneCount = (key: 'morning' | 'night') => week.filter((d) => (d.sections[key] ?? 0) >= 100).length;
   const revisionDaysWeek = week.filter((d) => d.academics.revision).length;
   const totalQuestionsMonth = month.reduce(
-    (s, d) => s + d.academics.probabilityQuestions + d.academics.leetcodeQuestions + d.academics.codeforcesQuestions,
+    (s, d) => s + Object.values(d.academics.questionCounts).reduce((a, b) => a + b, 0),
     0
   );
   const revisionDaysMonth = month.filter((d) => d.academics.revision).length;
@@ -113,7 +117,7 @@ export default function Statistics() {
 
       <SleepStats days={days} />
       <HydrationStats days={days} />
-      <AcademicStats days={days} exatest={exatest} />
+      <AcademicStats days={days} exatest={exatest} categories={categories} />
       <RoutineStats days={days} />
 
       <SummaryCard
@@ -125,9 +129,10 @@ export default function Statistics() {
           { label: 'Night routine', value: `${fullyDoneCount('night')} / ${week.length} days` },
           { label: 'Revision', value: `${revisionDaysWeek} / ${week.length} days` },
           { label: 'Average sleep', value: formatMinutes(average(week.map((d) => d.sleep.durationMinutes || 0))) },
-          { label: 'Probability', value: `${week.reduce((s, d) => s + d.academics.probabilityQuestions, 0)} questions` },
-          { label: 'LeetCode', value: `${week.reduce((s, d) => s + d.academics.leetcodeQuestions, 0)} questions` },
-          { label: 'Codeforces', value: `${week.reduce((s, d) => s + d.academics.codeforcesQuestions, 0)} questions` },
+          ...enabledCategories.map((cat) => ({
+            label: cat.label,
+            value: `${week.reduce((s, d) => s + (d.academics.questionCounts[cat.id] || 0), 0)} questions`,
+          })),
           { label: 'Water', value: `${average(week.map((d) => d.hydration.litersConsumed)).toFixed(2)} L/day` },
         ]}
       />
