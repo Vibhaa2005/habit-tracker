@@ -141,16 +141,16 @@ export function AssignmentsPanel() {
             <h3 className="font-semibold text-lg mb-3">{editingId ? 'Edit assignment' : 'New assignment'}</h3>
             <div className="flex flex-col gap-3">
               <Field label="Name">
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input" />
+                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="input w-full" />
               </Field>
               <Field label="Subject">
-                <input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="input" />
+                <input value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} className="input w-full" />
               </Field>
               <Field label="Description">
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="input"
+                  className="input w-full"
                   rows={2}
                 />
               </Field>
@@ -159,18 +159,18 @@ export function AssignmentsPanel() {
                   type="date"
                   value={form.deadline}
                   onChange={(e) => setForm({ ...form, deadline: e.target.value })}
-                  className="input"
+                  className="input w-full"
                 />
               </Field>
               <Field label="Status">
-                <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as AssignmentStatus })} className="input">
+                <select value={form.status} onChange={(e) => setForm({ ...form, status: e.target.value as AssignmentStatus })} className="input w-full">
                   {STATUSES.map((s) => (
                     <option key={s}>{s}</option>
                   ))}
                 </select>
               </Field>
               <Field label="Notes">
-                <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="input" rows={2} />
+                <textarea value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} className="input w-full" rows={2} />
               </Field>
             </div>
             <div className="flex gap-2 mt-4">

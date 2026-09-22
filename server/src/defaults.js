@@ -99,6 +99,16 @@ const RECURRING_TASKS = [
     anchorDate: ANCHOR_FRIDAY,
     enabled: true,
   },
+  {
+    id: uid('rec'),
+    label: 'Weekly revision',
+    category: 'Academics',
+    frequencyType: 'weekly',
+    weekdays: [6], // Saturday
+    intervalDays: null,
+    anchorDate: null,
+    enabled: true,
+  },
 ];
 
 function defaultSettings() {

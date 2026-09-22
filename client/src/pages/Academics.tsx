@@ -40,10 +40,22 @@ export default function Academics() {
 
       <SectionCard title="Revision" icon="📖">
         <CheckRow
-          label="Revision completed"
+          label="Daily revision"
           checked={!!dayResponse.day.academics.revision}
           onToggle={(next) => patchDay({ academics: { revision: next } }, next ? '✓ Completed' : undefined)}
         />
+        {dayResponse.dueRecurring
+          .filter((task) => task.category === 'Academics')
+          .map((task) => (
+            <CheckRow
+              key={task.id}
+              label={task.label}
+              checked={!!dayResponse.day.recurringTasks[task.id]}
+              onToggle={(next) =>
+                patchDay({ recurringTasks: { [task.id]: next } }, next ? '✓ Completed' : undefined)
+              }
+            />
+          ))}
       </SectionCard>
 
       <SectionCard title="Exatest" icon="🎯">

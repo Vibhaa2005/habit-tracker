@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { SectionCard } from '../components/ui/SectionCard';
 import { RoutineListEditor } from '../components/customize/RoutineListEditor';
@@ -7,15 +7,41 @@ import type { Settings } from '../types';
 
 export default function Customize() {
   const { settings, saveSettings, pushToast } = useApp();
+  const [draft, setDraft] = useState<Settings | null>(settings);
   const [savingKey, setSavingKey] = useState<string | null>(null);
+  const draftRef = useRef<Settings | null>(settings);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  if (!settings) return null;
+  // Adopt settings loaded from the server, but never clobber an edit that's
+  // still pending a debounced save.
+  useEffect(() => {
+    if (settings && !timerRef.current) {
+      setDraft(settings);
+      draftRef.current = settings;
+    }
+  }, [settings]);
 
-  async function persist(patch: Partial<Settings>, key: string) {
+  if (!draft) return null;
+
+  // Updates the on-screen draft immediately (so typing/toggling always feels
+  // instant) and debounces the actual network save — saving on every single
+  // keystroke caused rapid edits to race and clobber each other, which made
+  // text fields (like a recurring task's name) appear to not keep what you
+  // typed.
+  function persist(patch: Partial<Settings>, key: string) {
+    const base = draftRef.current;
+    if (!base) return;
+    const next = { ...base, ...patch };
+    draftRef.current = next;
+    setDraft(next);
     setSavingKey(key);
-    await saveSettings({ ...settings!, ...patch });
-    setSavingKey(null);
-    pushToast('✓ Settings updated');
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(async () => {
+      timerRef.current = null;
+      await saveSettings(next);
+      setSavingKey(null);
+      pushToast('✓ Settings updated');
+    }, 500);
   }
 
   return (
@@ -28,19 +54,19 @@ export default function Customize() {
       <SectionCard title="Wake-up time" icon="⏰">
         <input
           type="time"
-          value={settings.wakeUpTime}
+          value={draft.wakeUpTime}
           onChange={(e) => persist({ wakeUpTime: e.target.value }, 'wakeUpTime')}
           className="input w-40"
         />
       </SectionCard>
 
       <SectionCard title="Morning routine" icon="🌅">
-        <RoutineListEditor items={settings.morningRoutine} onChange={(items) => persist({ morningRoutine: items }, 'morning')} />
+        <RoutineListEditor items={draft.morningRoutine} onChange={(items) => persist({ morningRoutine: items }, 'morning')} />
       </SectionCard>
 
       <SectionCard title="Meals" icon="🍽️">
         <p className="text-xs text-[var(--color-ink-soft)] mb-2">Meal checklist</p>
-        <RoutineListEditor items={settings.meals} onChange={(items) => persist({ meals: items }, 'meals')} />
+        <RoutineListEditor items={draft.meals} onChange={(items) => persist({ meals: items }, 'meals')} />
 
         <p className="text-xs text-[var(--color-ink-soft)] mt-4 mb-2">Daily food targets</p>
         <div className="grid grid-cols-3 gap-3">
@@ -50,11 +76,11 @@ export default function Customize() {
               <input
                 type="number"
                 min={0}
-                value={settings.foodTargets[key]}
+                value={draft.foodTargets[key]}
                 onChange={(e) =>
-                  persist({ foodTargets: { ...settings.foodTargets, [key]: Number(e.target.value) || 0 } }, `target_${key}`)
+                  persist({ foodTargets: { ...draft.foodTargets, [key]: Number(e.target.value) || 0 } }, `target_${key}`)
                 }
-                className="input"
+                className="input w-full"
               />
             </label>
           ))}
@@ -69,20 +95,20 @@ export default function Customize() {
               type="number"
               min={0}
               step="0.1"
-              value={settings.hydration.targetLiters}
+              value={draft.hydration.targetLiters}
               onChange={(e) => persist({ hydration: { targetLiters: Number(e.target.value) || 0 } }, 'targetLiters')}
-              className="input"
+              className="input w-full"
             />
           </label>
         </div>
       </SectionCard>
 
       <SectionCard title="Movement" icon="🚶">
-        <RoutineListEditor items={settings.movement} onChange={(items) => persist({ movement: items }, 'movement')} trackDurationOption />
+        <RoutineListEditor items={draft.movement} onChange={(items) => persist({ movement: items }, 'movement')} trackDurationOption />
       </SectionCard>
 
       <SectionCard title="Night routine" icon="🌙">
-        <RoutineListEditor items={settings.nightRoutine} onChange={(items) => persist({ nightRoutine: items }, 'night')} />
+        <RoutineListEditor items={draft.nightRoutine} onChange={(items) => persist({ nightRoutine: items }, 'night')} />
       </SectionCard>
 
       <SectionCard title="Sleep targets" icon="😴">
@@ -91,18 +117,18 @@ export default function Customize() {
             <span className="text-xs text-[var(--color-ink-soft)]">Bedtime</span>
             <input
               type="time"
-              value={settings.sleepTargets.bedtime}
-              onChange={(e) => persist({ sleepTargets: { ...settings.sleepTargets, bedtime: e.target.value } }, 'bedtime')}
-              className="input"
+              value={draft.sleepTargets.bedtime}
+              onChange={(e) => persist({ sleepTargets: { ...draft.sleepTargets, bedtime: e.target.value } }, 'bedtime')}
+              className="input w-full"
             />
           </label>
           <label className="flex flex-col gap-1">
             <span className="text-xs text-[var(--color-ink-soft)]">Wake time</span>
             <input
               type="time"
-              value={settings.sleepTargets.wakeTime}
-              onChange={(e) => persist({ sleepTargets: { ...settings.sleepTargets, wakeTime: e.target.value } }, 'wakeTime')}
-              className="input"
+              value={draft.sleepTargets.wakeTime}
+              onChange={(e) => persist({ sleepTargets: { ...draft.sleepTargets, wakeTime: e.target.value } }, 'wakeTime')}
+              className="input w-full"
             />
           </label>
           <label className="flex flex-col gap-1">
@@ -111,11 +137,11 @@ export default function Customize() {
               type="number"
               step="0.5"
               min={0}
-              value={settings.sleepTargets.durationHours}
+              value={draft.sleepTargets.durationHours}
               onChange={(e) =>
-                persist({ sleepTargets: { ...settings.sleepTargets, durationHours: Number(e.target.value) || 0 } }, 'durationHours')
+                persist({ sleepTargets: { ...draft.sleepTargets, durationHours: Number(e.target.value) || 0 } }, 'durationHours')
               }
-              className="input"
+              className="input w-full"
             />
           </label>
         </div>
@@ -129,11 +155,11 @@ export default function Customize() {
               <input
                 type="number"
                 min={0}
-                value={settings.academicTargets[key]}
+                value={draft.academicTargets[key]}
                 onChange={(e) =>
-                  persist({ academicTargets: { ...settings.academicTargets, [key]: Number(e.target.value) || 0 } }, `academic_${key}`)
+                  persist({ academicTargets: { ...draft.academicTargets, [key]: Number(e.target.value) || 0 } }, `academic_${key}`)
                 }
-                className="input"
+                className="input w-full"
               />
             </label>
           ))}
@@ -141,7 +167,7 @@ export default function Customize() {
       </SectionCard>
 
       <SectionCard title="Recurring tasks" icon="🧺">
-        <RecurringTasksEditor tasks={settings.recurringTasks} onChange={(tasks) => persist({ recurringTasks: tasks }, 'recurring')} />
+        <RecurringTasksEditor tasks={draft.recurringTasks} onChange={(tasks) => persist({ recurringTasks: tasks }, 'recurring')} />
       </SectionCard>
 
       {savingKey && <p className="text-xs text-center text-[var(--color-ink-soft)]">Saving…</p>}

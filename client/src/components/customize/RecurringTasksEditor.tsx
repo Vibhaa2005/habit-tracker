@@ -61,7 +61,7 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
         <select
           value={task.frequencyType}
           onChange={(e) => onUpdate({ frequencyType: e.target.value as FrequencyType })}
-          className="input py-1"
+          className="input w-full py-1"
         >
           {FREQUENCIES.map((f) => (
             <option key={f.value} value={f.value}>

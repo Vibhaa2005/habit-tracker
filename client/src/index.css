@@ -78,13 +78,16 @@ body {
   animation: toast-in 0.2s ease-out;
 }
 
+/* No width here on purpose — Tailwind's own width/flex utilities (w-full,
+   flex-1, w-32, ...) decide sizing per usage. A hardcoded width:100% here
+   previously fought with flex-1/w-32 in flex rows (e.g. the recurring-task
+   editor), causing fields to render at the wrong size and hide their text. */
 .input {
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.875rem;
   background: var(--color-surface);
-  width: 100%;
   color: var(--color-ink);
 }
 .input:focus {
