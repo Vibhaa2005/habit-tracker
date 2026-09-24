@@ -90,6 +90,7 @@ export default function Dashboard() {
       <HydrationSection />
       <MovementSection />
       <WeeklyCareSection />
+      <NightSection />
 
       <SectionCard
         title="Academics"
@@ -126,7 +127,6 @@ export default function Dashboard() {
         )}
       </SectionCard>
 
-      <NightSection />
       <SleepSection />
     </div>
   );

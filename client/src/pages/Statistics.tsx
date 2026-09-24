@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
 import { useApp, todayStr } from '../context/AppContext';
 import type { ExatestState, Expense, StatsResponse } from '../types';
-import { CollapsibleCard } from '../components/ui/CollapsibleCard';
+import { SectionCard } from '../components/ui/SectionCard';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { ContributionGrid } from '../components/ContributionGrid';
 import { SummaryCard } from '../components/SummaryCard';
@@ -95,15 +95,11 @@ export default function Statistics() {
         </div>
       </header>
 
-      <CollapsibleCard title="Consistency" icon="📅">
+      <SectionCard title="Consistency" icon="📅">
         <ContributionGrid days={days} />
-      </CollapsibleCard>
+      </SectionCard>
 
-      <CollapsibleCard
-        title="Overall completion"
-        icon="✅"
-        summary={<span className="text-xs text-[var(--color-ink-soft)]">{overallAvg.overall}%</span>}
-      >
+      <SectionCard title="Overall completion" icon="✅">
         <div className="flex items-baseline justify-between mb-3">
           <span className="text-sm text-[var(--color-ink-soft)]">Overall</span>
           <span className="text-2xl font-bold text-[var(--color-green-700)]">{overallAvg.overall}%</span>
@@ -119,7 +115,7 @@ export default function Statistics() {
             </div>
           ))}
         </div>
-      </CollapsibleCard>
+      </SectionCard>
 
       <SleepStats days={days} />
       <HydrationStats days={days} />
