@@ -17,7 +17,7 @@ export function SleepSection() {
     <SectionCard title="Sleep" icon="😴">
       <div className="grid grid-cols-3 gap-3 items-end">
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-[var(--color-ink-soft)]">Bedtime</span>
+          <span className="text-xs text-[var(--color-ink-soft)]">Yesterday's bedtime</span>
           <input
             type="time"
             value={sleep.bedtime ?? ''}
@@ -26,7 +26,7 @@ export function SleepSection() {
           />
         </label>
         <label className="flex flex-col gap-1">
-          <span className="text-xs text-[var(--color-ink-soft)]">Wake time</span>
+          <span className="text-xs text-[var(--color-ink-soft)]">Today's wake time</span>
           <input
             type="time"
             value={sleep.wakeTime ?? ''}
