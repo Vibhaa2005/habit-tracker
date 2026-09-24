@@ -1,5 +1,5 @@
 import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, startOfWeek } from 'date-fns';
 import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { Expense, RoutineItem, StatsDay } from '../../types';
 import { average } from '../../lib/statsUtils';
@@ -13,6 +13,19 @@ const PIE_COLORS = [
   'var(--color-heat-4)',
   'var(--color-heat-2)',
 ];
+
+function monthKey(dateStr: string) {
+  return dateStr.slice(0, 7); // YYYY-MM
+}
+
+function monthLabel(key: string) {
+  return format(parseISO(`${key}-01`), 'MMM yyyy');
+}
+
+// Monday-anchored calendar week, keyed by that Monday's date.
+function weekKey(dateStr: string) {
+  return format(startOfWeek(parseISO(dateStr), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+}
 
 export function ExpenseStats({
   days,
@@ -39,13 +52,23 @@ export function ExpenseStats({
     );
   }
 
-  const total = inRange.reduce((s, e) => s + e.amount, 0);
-  const avgPerDay = average(days.map((d) => d.expensesTotal));
+  const monthTotals = new Map<string, number>();
+  for (const d of days) {
+    const key = monthKey(d.date);
+    monthTotals.set(key, (monthTotals.get(key) || 0) + d.expensesTotal);
+  }
+  const monthChartData = [...monthTotals.entries()]
+    .sort(([a], [b]) => (a < b ? -1 : 1))
+    .map(([key, value]) => ({ month: monthLabel(key), amount: Math.round(value * 100) / 100 }));
 
-  const chartData = days.slice(-30).map((d) => ({
-    date: format(parseISO(d.date), 'MMM d'),
-    amount: Math.round(d.expensesTotal * 100) / 100,
-  }));
+  const currentMonthTotal = monthTotals.get(monthKey(end)) || 0;
+
+  const weekTotals = new Map<string, number>();
+  for (const d of days) {
+    const key = weekKey(d.date);
+    weekTotals.set(key, (weekTotals.get(key) || 0) + d.expensesTotal);
+  }
+  const avgWeekly = average([...weekTotals.values()]);
 
   const reasonLabel = (id: string | null) => (id ? reasons.find((r) => r.id === id)?.label ?? 'Uncategorized' : 'Uncategorized');
 
@@ -57,24 +80,28 @@ export function ExpenseStats({
   const pieData = [...byReason.entries()].map(([name, value]) => ({ name, value: Math.round(value * 100) / 100 }));
 
   return (
-    <CollapsibleCard title="Expense statistics" icon="💰" summary={<span className="text-xs text-[var(--color-ink-soft)]">{total.toFixed(2)} in range</span>}>
+    <CollapsibleCard
+      title="Expense statistics"
+      icon="💰"
+      summary={<span className="text-xs text-[var(--color-ink-soft)]">{currentMonthTotal.toFixed(2)} this month</span>}
+    >
       <div className="grid grid-cols-2 gap-4 mb-5">
         <div>
-          <p className="text-xs text-[var(--color-ink-soft)]">Total in range</p>
-          <p className="text-lg font-bold text-[var(--color-green-700)]">{total.toFixed(2)}</p>
+          <p className="text-xs text-[var(--color-ink-soft)]">Monthly total</p>
+          <p className="text-lg font-bold text-[var(--color-green-700)]">{currentMonthTotal.toFixed(2)}</p>
         </div>
         <div>
-          <p className="text-xs text-[var(--color-ink-soft)]">Avg per day</p>
-          <p className="text-lg font-bold text-[var(--color-green-700)]">{avgPerDay.toFixed(2)}</p>
+          <p className="text-xs text-[var(--color-ink-soft)]">Avg weekly spending</p>
+          <p className="text-lg font-bold text-[var(--color-green-700)]">{avgWeekly.toFixed(2)}</p>
         </div>
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Spending over time</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Spending by month</p>
       <div className="h-40 mb-6">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData}>
+          <BarChart data={monthChartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-            <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+            <XAxis dataKey="month" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={30} />
             <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
             <Bar dataKey="amount" fill="var(--color-green-500)" radius={[4, 4, 0, 0]} />
