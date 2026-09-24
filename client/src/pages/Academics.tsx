@@ -3,10 +3,11 @@ import { SectionCard } from '../components/ui/SectionCard';
 import { CheckRow } from '../components/ui/CheckRow';
 import { DailyCounter } from '../components/ui/DailyCounter';
 import { AssignmentsPanel } from '../components/AssignmentsPanel';
+import { AcademicStats } from '../components/charts/AcademicStats';
 import { DateNav } from '../components/DateNav';
-import { useApp } from '../context/AppContext';
+import { useApp, todayStr } from '../context/AppContext';
 import { api } from '../api';
-import type { ExatestState } from '../types';
+import type { ExatestState, StatsResponse } from '../types';
 
 const CATEGORY_EMOJI: Record<string, string> = {
   probability: '🎲',
@@ -18,9 +19,11 @@ export default function Academics() {
   const { settings, dayResponse, patchDay, selectedDate, pushToast } = useApp();
   const [exatest, setExatest] = useState<ExatestState | null>(null);
   const [scoreInput, setScoreInput] = useState('');
+  const [stats, setStats] = useState<StatsResponse | null>(null);
 
   useEffect(() => {
     api.getExatest().then(setExatest);
+    api.getStats('3m', todayStr()).then(setStats);
   }, []);
 
   async function submitScore() {
@@ -104,6 +107,8 @@ export default function Academics() {
             ))}
         </div>
       </SectionCard>
+
+      <AcademicStats days={stats?.days ?? []} exatest={exatest} categories={settings.academicCategories} />
 
       <SectionCard title="Assignments" icon="📝">
         <AssignmentsPanel />

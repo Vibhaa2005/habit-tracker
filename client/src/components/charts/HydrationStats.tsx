@@ -47,7 +47,7 @@ export function HydrationStats({ days }: { days: StatsDay[] }) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={30} unit="L" />
-            <Tooltip formatter={(v: any) => [`${v} L`, 'Water']} contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip formatter={(v: any) => [`${v} L`, 'Water']} contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
             <Bar dataKey="liters" fill="var(--color-green-500)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>

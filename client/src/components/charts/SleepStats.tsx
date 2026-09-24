@@ -70,7 +70,7 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={28} unit="h" />
-            <Tooltip formatter={(v: any) => [`${v}h`, 'Sleep']} contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip formatter={(v: any) => [`${v}h`, 'Sleep']} contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
             <Bar dataKey="hours" fill="var(--color-green-500)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
@@ -83,7 +83,7 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={40} tickFormatter={minutesToClock} domain={['dataMin - 30', 'dataMax + 30']} />
-            <Tooltip formatter={(v: any) => [minutesToClock(v), 'Bedtime']} contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip formatter={(v: any) => [minutesToClock(v), 'Bedtime']} contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
             <Line type="monotone" dataKey="minutes" stroke="var(--color-green-700)" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>
@@ -96,7 +96,7 @@ export function SleepStats({ days }: { days: StatsDay[] }) {
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
             <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={40} tickFormatter={minutesToClock} domain={['dataMin - 30', 'dataMax + 30']} />
-            <Tooltip formatter={(v: any) => [minutesToClock(v), 'Wake time']} contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip formatter={(v: any) => [minutesToClock(v), 'Wake time']} contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
             <Line type="monotone" dataKey="minutes" stroke="var(--color-amber-500)" strokeWidth={2} dot={false} />
           </LineChart>
         </ResponsiveContainer>

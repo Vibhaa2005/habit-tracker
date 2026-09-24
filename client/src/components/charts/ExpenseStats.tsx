@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { format, parseISO, startOfWeek } from 'date-fns';
 import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { Expense, RoutineItem, StatsDay } from '../../types';
@@ -18,13 +18,16 @@ function monthKey(dateStr: string) {
   return dateStr.slice(0, 7); // YYYY-MM
 }
 
-function monthLabel(key: string) {
-  return format(parseISO(`${key}-01`), 'MMM yyyy');
-}
-
 // Monday-anchored calendar week, keyed by that Monday's date.
 function weekKey(dateStr: string) {
   return format(startOfWeek(parseISO(dateStr), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+}
+
+// Every calendar date (1st through the last day) of the month containing `end`.
+function datesInMonthOf(end: string) {
+  const [y, m] = end.split('-').map(Number);
+  const count = new Date(y, m, 0).getDate();
+  return Array.from({ length: count }, (_, i) => `${y}-${String(m).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`);
 }
 
 export function ExpenseStats({
@@ -57,11 +60,13 @@ export function ExpenseStats({
     const key = monthKey(d.date);
     monthTotals.set(key, (monthTotals.get(key) || 0) + d.expensesTotal);
   }
-  const monthChartData = [...monthTotals.entries()]
-    .sort(([a], [b]) => (a < b ? -1 : 1))
-    .map(([key, value]) => ({ month: monthLabel(key), amount: Math.round(value * 100) / 100 }));
-
   const currentMonthTotal = monthTotals.get(monthKey(end)) || 0;
+
+  const expensesByDate = new Map(days.map((d) => [d.date, d.expensesTotal]));
+  const dailyChartData = datesInMonthOf(end).map((date) => ({
+    day: format(parseISO(date), 'd'),
+    amount: Math.round((expensesByDate.get(date) || 0) * 100) / 100,
+  }));
 
   const weekTotals = new Map<string, number>();
   for (const d of days) {
@@ -96,16 +101,16 @@ export function ExpenseStats({
         </div>
       </div>
 
-      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Spending by month</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Daily spending this month</p>
       <div className="h-40 mb-6">
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={monthChartData}>
+          <LineChart data={dailyChartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-            <XAxis dataKey="month" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+            <XAxis dataKey="day" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
             <YAxis tick={{ fontSize: 10 }} width={30} />
-            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
-            <Bar dataKey="amount" fill="var(--color-green-500)" radius={[4, 4, 0, 0]} />
-          </BarChart>
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
+            <Line type="monotone" dataKey="amount" stroke="var(--color-green-500)" strokeWidth={2} dot={false} />
+          </LineChart>
         </ResponsiveContainer>
       </div>
 
@@ -118,7 +123,7 @@ export function ExpenseStats({
                 <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
               ))}
             </Pie>
-            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
           </PieChart>
         </ResponsiveContainer>
       </div>

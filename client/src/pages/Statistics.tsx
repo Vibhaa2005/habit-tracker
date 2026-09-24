@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 import { api } from '../api';
 import { useApp, todayStr } from '../context/AppContext';
-import type { ExatestState, Expense, StatsResponse } from '../types';
+import type { Expense, StatsResponse } from '../types';
 import { SectionCard } from '../components/ui/SectionCard';
 import { ProgressBar } from '../components/ui/ProgressBar';
 import { ContributionGrid } from '../components/ContributionGrid';
 import { SummaryCard } from '../components/SummaryCard';
 import { SleepStats } from '../components/charts/SleepStats';
 import { HydrationStats } from '../components/charts/HydrationStats';
-import { AcademicStats } from '../components/charts/AcademicStats';
 import { ExpenseStats } from '../components/charts/ExpenseStats';
 import { average, formatMinutes, longestStreakAbove, lastNDays } from '../lib/statsUtils';
 
@@ -23,7 +22,6 @@ export default function Statistics() {
   const { settings } = useApp();
   const [range, setRange] = useState('3m');
   const [stats, setStats] = useState<StatsResponse | null>(null);
-  const [exatest, setExatest] = useState<ExatestState | null>(null);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const categories = settings?.academicCategories ?? [];
   const enabledCategories = [...categories].filter((c) => c.enabled).sort((a, b) => a.order - b.order);
@@ -33,7 +31,6 @@ export default function Statistics() {
   }, [range]);
 
   useEffect(() => {
-    api.getExatest().then(setExatest);
     api.getExpenses().then(setExpenses);
   }, []);
 
@@ -119,7 +116,6 @@ export default function Statistics() {
 
       <SleepStats days={days} />
       <HydrationStats days={days} />
-      <AcademicStats days={days} exatest={exatest} categories={categories} />
       <ExpenseStats days={days} expenses={expenses} reasons={settings?.expenseReasons ?? []} start={stats.start} end={stats.end} />
 
       <SummaryCard

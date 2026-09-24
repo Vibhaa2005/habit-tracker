@@ -36,7 +36,7 @@ export function AcademicStats({
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" horizontal={false} />
             <XAxis type="number" tick={{ fontSize: 10 }} allowDecimals={false} />
             <YAxis type="category" dataKey="name" tick={{ fontSize: 12 }} width={80} />
-            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+            <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
             <Bar dataKey="value" fill="var(--color-green-500)" radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
@@ -64,7 +64,7 @@ export function AcademicStats({
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
                 <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
                 <YAxis tick={{ fontSize: 10 }} width={28} />
-                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8, background: "#fff", border: "1px solid #ddd" }} labelStyle={{ color: "#111" }} itemStyle={{ color: "#111" }} />
                 <Line type="monotone" dataKey="score" stroke="var(--color-green-700)" strokeWidth={2} dot={{ r: 3 }} />
               </LineChart>
             </ResponsiveContainer>
