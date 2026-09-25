@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { SectionCard } from '../components/ui/SectionCard';
 import { CheckRow } from '../components/ui/CheckRow';
 import { DailyCounter } from '../components/ui/DailyCounter';
 import { AssignmentsPanel } from '../components/AssignmentsPanel';
-import { AcademicStats } from '../components/charts/AcademicStats';
 import { DateNav } from '../components/DateNav';
-import { useApp, todayStr } from '../context/AppContext';
+import { useApp } from '../context/AppContext';
 import { api } from '../api';
-import type { ExatestState, StatsResponse } from '../types';
+import type { ExatestState } from '../types';
 
 const CATEGORY_EMOJI: Record<string, string> = {
   probability: '🎲',
@@ -19,11 +19,9 @@ export default function Academics() {
   const { settings, dayResponse, patchDay, selectedDate, pushToast } = useApp();
   const [exatest, setExatest] = useState<ExatestState | null>(null);
   const [scoreInput, setScoreInput] = useState('');
-  const [stats, setStats] = useState<StatsResponse | null>(null);
 
   useEffect(() => {
     api.getExatest().then(setExatest);
-    api.getStats('3m', todayStr()).then(setStats);
   }, []);
 
   async function submitScore() {
@@ -108,7 +106,15 @@ export default function Academics() {
         </div>
       </SectionCard>
 
-      <AcademicStats days={stats?.days ?? []} exatest={exatest} categories={settings.academicCategories} />
+      <Link
+        to="/academics/statistics"
+        className="flex items-center justify-between bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-4 sm:p-5 hover:bg-[var(--color-surface-muted)] transition-colors"
+      >
+        <span className="flex items-center gap-2 text-sm font-semibold tracking-wide uppercase text-[var(--color-ink-soft)]">
+          📊 Academic statistics
+        </span>
+        <span className="text-sm text-[var(--color-green-700)] font-medium">View trends →</span>
+      </Link>
 
       <SectionCard title="Assignments" icon="📝">
         <AssignmentsPanel />
