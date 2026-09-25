@@ -39,10 +39,10 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
     onChange(tasks.filter((t) => t.id !== id));
   }
 
-  function toggleWeekday(task: RecurringTask, day: number) {
+  function toggleWeekday(task: RecurringTask, day: number, onUpdate: (patch: Partial<RecurringTask>) => void) {
     const current = task.weekdays || [];
     const next = current.includes(day) ? current.filter((d) => d !== day) : [...current, day].sort();
-    update(task.id, { weekdays: next });
+    onUpdate({ weekdays: next });
   }
 
   function startAdd() {
@@ -74,7 +74,7 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
             {WEEKDAYS.map((w, i) => (
               <button
                 key={w}
-                onClick={() => toggleWeekday(task, i)}
+                onClick={() => toggleWeekday(task, i, onUpdate)}
                 className={`w-8 h-8 rounded-full text-xs font-medium ${
                   (task.weekdays || []).includes(i)
                     ? 'bg-[var(--color-green-500)] text-white'
