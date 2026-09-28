@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { SectionCard } from '../components/ui/SectionCard';
 import { useApp, todayStr } from '../context/AppContext';
 import { api } from '../api';
@@ -28,6 +28,12 @@ const RANGES: { key: string; label: string }[] = [
   { key: '6m', label: '6 Months' },
   { key: '1y', label: '1 Year' },
 ];
+
+function formatHM(minutes: number) {
+  const h = Math.floor(minutes / 60);
+  const m = Math.round(minutes % 60);
+  return `${h}h ${m}m`;
+}
 
 const tooltipStyle = {
   contentStyle: { fontSize: 12, borderRadius: 8, background: '#fff', border: '1px solid #ddd' },
@@ -58,6 +64,13 @@ export default function AcademicStatistics() {
   const revisionPct = days.length > 0 ? Math.round((revisionDays / days.length) * 100) : 0;
 
   const scoreHistory = (exatest?.history || []).map((h) => ({ date: format(parseISO(h.date), 'MMM d'), score: h.score }));
+
+  const studyChartData = days.map((d) => ({
+    date: format(parseISO(d.date), 'MMM d'),
+    hours: Math.round(((d.academics.studyMinutes || 0) / 60) * 100) / 100,
+  }));
+  const studyTotalMinutes = days.reduce((s, d) => s + (d.academics.studyMinutes || 0), 0);
+  const studyDailyAvgMinutes = average(days.map((d) => d.academics.studyMinutes || 0));
 
   return (
     <div className="space-y-4">
@@ -156,6 +169,32 @@ export default function AcademicStatistics() {
               </SectionCard>
             );
           })}
+
+          <SectionCard title="Study time" icon="⏱️">
+            {studyTotalMinutes === 0 ? (
+              <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
+                No study time logged in this range yet.
+              </p>
+            ) : (
+              <>
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-xs text-[var(--color-ink-soft)]">Daily average</span>
+                  <span className="text-xl font-bold text-[var(--color-green-700)]">{formatHM(studyDailyAvgMinutes)} / day</span>
+                </div>
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={studyChartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                      <YAxis tick={{ fontSize: 10 }} width={30} unit="h" />
+                      <Tooltip formatter={(v: any) => [`${v}h`, 'Study time']} {...tooltipStyle} />
+                      <Bar dataKey="hours" fill="var(--color-blue-500)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+          </SectionCard>
         </>
       )}
     </div>

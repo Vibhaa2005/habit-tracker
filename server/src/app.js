@@ -286,6 +286,7 @@ app.get(
           revision: !!day.academics.revision,
           questionCounts: day.academics.questionCounts || {},
           exatestScore: day.academics.exatestScore || null,
+          studyMinutes: day.academics.studyMinutes || 0,
         },
         expensesTotal: expensesByDate[cursor] || 0,
       });

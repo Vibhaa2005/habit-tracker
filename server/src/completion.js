@@ -13,6 +13,7 @@ function emptyDay() {
     academics: {
       revision: false,
       questionCounts: {},
+      studyMinutes: 0,
     },
     recurringTasks: {},
   };

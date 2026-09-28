@@ -35,6 +35,16 @@ export default function Academics() {
 
   if (!settings || !dayResponse) return null;
 
+  const totalStudyMinutes = dayResponse.day.academics.studyMinutes || 0;
+  const studyHours = Math.floor(totalStudyMinutes / 60);
+  const studyMins = totalStudyMinutes % 60;
+
+  function updateStudyTime(hours: number, minutes: number) {
+    const clampedMinutes = Math.min(Math.max(minutes, 0), 59);
+    const clampedHours = Math.max(hours, 0);
+    patchDay({ academics: { studyMinutes: clampedHours * 60 + clampedMinutes } });
+  }
+
   return (
     <div className="space-y-4">
       <header className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 flex items-center justify-between flex-wrap gap-3">
@@ -103,6 +113,35 @@ export default function Academics() {
                 }
               />
             ))}
+        </div>
+      </SectionCard>
+
+      <SectionCard title="Study time" icon="⏱️">
+        <div className="flex items-center gap-3">
+          <label className="flex items-center gap-2">
+            <input
+              type="number"
+              min={0}
+              value={studyHours}
+              onChange={(e) => updateStudyTime(Number(e.target.value) || 0, studyMins)}
+              className="input w-16"
+            />
+            <span className="text-sm text-[var(--color-ink-soft)]">hrs</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="number"
+              min={0}
+              max={59}
+              value={studyMins}
+              onChange={(e) => updateStudyTime(studyHours, Number(e.target.value) || 0)}
+              className="input w-16"
+            />
+            <span className="text-sm text-[var(--color-ink-soft)]">min</span>
+          </label>
+          <span className="text-sm text-[var(--color-ink-soft)] ml-auto">
+            {totalStudyMinutes > 0 ? `${studyHours}h ${studyMins}m today` : 'Nothing logged yet'}
+          </span>
         </div>
       </SectionCard>
 

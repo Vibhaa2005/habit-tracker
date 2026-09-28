@@ -45,6 +45,7 @@ export interface DayAcademics {
   revision: boolean;
   questionCounts: Record<string, number>;
   exatestScore?: number | null;
+  studyMinutes: number;
 }
 
 export interface DaySleep {
