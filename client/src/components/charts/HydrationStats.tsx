@@ -1,16 +1,14 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { format, parseISO, startOfWeek } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { StatsDay } from '../../types';
 import { average } from '../../lib/statsUtils';
 
-function monthKey(dateStr: string) {
-  return dateStr.slice(0, 7); // YYYY-MM
-}
-
-// Monday-anchored calendar week, keyed by that Monday's date.
-function weekKey(dateStr: string) {
-  return format(startOfWeek(parseISO(dateStr), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+// Every calendar date (1st through the last day) of the month containing `end`.
+function datesInMonthOf(end: string) {
+  const [y, m] = end.split('-').map(Number);
+  const count = new Date(y, m, 0).getDate();
+  return Array.from({ length: count }, (_, i) => `${y}-${String(m).padStart(2, '0')}-${String(i + 1).padStart(2, '0')}`);
 }
 
 export function HydrationStats({ days }: { days: StatsDay[] }) {
@@ -26,19 +24,18 @@ export function HydrationStats({ days }: { days: StatsDay[] }) {
   }
 
   const today = days[days.length - 1].date;
-  const currentMonthDays = days.filter((d) => monthKey(d.date) === monthKey(today));
-  const monthlyAvgPerDay = average(currentMonthDays.map((d) => d.hydration.litersConsumed));
 
-  const weekTotals = new Map<string, number>();
-  for (const d of days) {
-    const key = weekKey(d.date);
-    weekTotals.set(key, (weekTotals.get(key) || 0) + d.hydration.litersConsumed);
-  }
-  const weeklyAvg = average([...weekTotals.values()]);
+  // Averages use rolling windows (last 30 / last 7 days) so they stay based
+  // on a full, consistent sample size regardless of where "today" falls in
+  // the calendar — no dip in the number right after a week/month resets.
+  const monthlyAvgPerDay = average(days.slice(-30).map((d) => d.hydration.litersConsumed));
+  const weeklyAvg = days.slice(-7).reduce((s, d) => s + d.hydration.litersConsumed, 0);
 
-  const chartData = days.slice(-30).map((d) => ({
-    date: format(parseISO(d.date), 'MMM d'),
-    liters: Math.round(d.hydration.litersConsumed * 100) / 100,
+  // The chart itself stays calendar-based: every day of the current month.
+  const litersByDate = new Map(days.map((d) => [d.date, d.hydration.litersConsumed]));
+  const chartData = datesInMonthOf(today).map((date) => ({
+    date: format(parseISO(date), 'MMM d'),
+    liters: Math.round((litersByDate.get(date) || 0) * 100) / 100,
   }));
 
   return (

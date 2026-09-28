@@ -1,8 +1,7 @@
 import { CartesianGrid, Cell, Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
-import { format, parseISO, startOfWeek } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import { CollapsibleCard } from '../ui/CollapsibleCard';
 import type { Expense, RoutineItem, StatsDay } from '../../types';
-import { average } from '../../lib/statsUtils';
 
 const PIE_COLORS = [
   'var(--color-green-500)',
@@ -16,11 +15,6 @@ const PIE_COLORS = [
 
 function monthKey(dateStr: string) {
   return dateStr.slice(0, 7); // YYYY-MM
-}
-
-// Monday-anchored calendar week, keyed by that Monday's date.
-function weekKey(dateStr: string) {
-  return format(startOfWeek(parseISO(dateStr), { weekStartsOn: 1 }), 'yyyy-MM-dd');
 }
 
 // Every calendar date (1st through the last day) of the month containing `end`.
@@ -68,12 +62,10 @@ export function ExpenseStats({
     amount: Math.round((expensesByDate.get(date) || 0) * 100) / 100,
   }));
 
-  const weekTotals = new Map<string, number>();
-  for (const d of days) {
-    const key = weekKey(d.date);
-    weekTotals.set(key, (weekTotals.get(key) || 0) + d.expensesTotal);
-  }
-  const avgWeekly = average([...weekTotals.values()]);
+  // Rolling window (not a calendar-week bucket average) so the number stays
+  // based on a full 7-day sample regardless of where "today" falls in the
+  // week.
+  const avgWeekly = days.slice(-7).reduce((s, d) => s + d.expensesTotal, 0);
 
   const reasonLabel = (id: string | null) => (id ? reasons.find((r) => r.id === id)?.label ?? 'Uncategorized' : 'Uncategorized');
 
