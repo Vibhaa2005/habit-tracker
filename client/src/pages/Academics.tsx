@@ -117,7 +117,7 @@ export default function Academics() {
       </SectionCard>
 
       <SectionCard title="Study time" icon="⏱️">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <label className="flex items-center gap-2">
             <input
               type="number"
@@ -139,7 +139,7 @@ export default function Academics() {
             />
             <span className="text-sm text-[var(--color-ink-soft)]">min</span>
           </label>
-          <span className="text-sm text-[var(--color-ink-soft)] ml-auto">
+          <span className="text-sm text-[var(--color-ink-soft)] sm:ml-auto">
             {totalStudyMinutes > 0 ? `${studyHours}h ${studyMins}m today` : 'Nothing logged yet'}
           </span>
         </div>

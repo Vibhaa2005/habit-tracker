@@ -85,7 +85,11 @@ body {
 /* No width here on purpose — Tailwind's own width/flex utilities (w-full,
    flex-1, w-32, ...) decide sizing per usage. A hardcoded width:100% here
    previously fought with flex-1/w-32 in flex rows (e.g. the recurring-task
-   editor), causing fields to render at the wrong size and hide their text. */
+   editor), causing fields to render at the wrong size and hide their text.
+   min-width: 0 overrides the flex-item default of min-width: auto, which
+   for a text input resolves to its natural (fairly wide) content size and
+   stops it from ever shrinking below that in a flex-1 row — the classic
+   cause of rows overflowing their card on narrow/mobile widths. */
 .input {
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
@@ -93,6 +97,7 @@ body {
   font-size: 0.875rem;
   background: var(--color-surface);
   color: var(--color-ink);
+  min-width: 0;
 }
 .input:focus {
   outline: 2px solid var(--color-green-300);

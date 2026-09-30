@@ -4,5 +4,4 @@ export const NAV_ITEMS = [
   { to: '/work', label: 'Work', emoji: '💼' },
   { to: '/expenses', label: 'Expenses', emoji: '💰' },
   { to: '/statistics', label: 'Statistics', emoji: '📊' },
-  { to: '/customize', label: 'Customize', emoji: '⚙️' },
 ];
