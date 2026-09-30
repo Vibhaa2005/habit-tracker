@@ -370,4 +370,16 @@ app.get(
   })
 );
 
+// ---------- Data export ----------
+
+app.get(
+  '/api/export',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Content-Disposition', `attachment; filename="lifeos-export-${todayStr()}.json"`);
+    res.send(JSON.stringify(db, null, 2));
+  })
+);
+
 module.exports = app;
