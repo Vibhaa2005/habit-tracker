@@ -167,3 +167,23 @@ export interface AchievementsResponse {
   list: Achievement[];
   stats: AchievementStats;
 }
+
+export interface WorkChecklistItem {
+  id: string;
+  label: string;
+  done: boolean;
+}
+
+export interface WorkResource {
+  id: string;
+  label: string;
+  url: string;
+}
+
+export interface WorkTopic {
+  id: string;
+  label: string;
+  order: number;
+  checklist: WorkChecklistItem[];
+  resources: WorkResource[];
+}

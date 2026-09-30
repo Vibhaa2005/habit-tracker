@@ -126,6 +126,33 @@ const ACADEMIC_CATEGORIES = [
   { id: 'codeforces', label: 'Codeforces', target: 2, enabled: true, order: 2 },
 ];
 
+const WORK_TOPIC_LABELS = [
+  'Codeforces',
+  'Leetcode',
+  'Cses',
+  'Probability',
+  'C++20',
+  'Computer Architecture + OS',
+  'Lock-free concurrency, memory model',
+  'SIMD/AVX2 – required only during orderbook',
+  'Distributed systems – required only for raft project',
+  'Network programming – required only for FIX library and raft',
+  'Projects',
+  'Research',
+  'Puzzles',
+  'Open source',
+  'Ocaml',
+  'Paper publishing',
+];
+
+const WORK_TOPICS = WORK_TOPIC_LABELS.map((label, order) => ({
+  id: uid('work'),
+  label,
+  order,
+  checklist: [],
+  resources: [],
+}));
+
 function defaultSettings() {
   return {
     wakeUpTime: '06:00',
@@ -148,6 +175,7 @@ function defaultDb() {
     dailyData: {},
     assignments: [],
     expenses: [],
+    workTopics: WORK_TOPICS,
     exatest: { highestScore: 0, history: [] },
     achievements: {}, // id -> { unlockedAt }
   };

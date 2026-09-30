@@ -4,6 +4,7 @@ import { Shell } from './components/layout/Shell';
 import Dashboard from './pages/Dashboard';
 import Academics from './pages/Academics';
 import AcademicStatistics from './pages/AcademicStatistics';
+import Work from './pages/Work';
 import Expenses from './pages/Expenses';
 import Statistics from './pages/Statistics';
 import Customize from './pages/Customize';
@@ -16,6 +17,7 @@ export default function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/academics" element={<Academics />} />
           <Route path="/academics/statistics" element={<AcademicStatistics />} />
+          <Route path="/work" element={<Work />} />
           <Route path="/expenses" element={<Expenses />} />
           <Route path="/statistics" element={<Statistics />} />
           <Route path="/customize" element={<Customize />} />

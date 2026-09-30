@@ -6,6 +6,7 @@ import type {
   StatsResponse,
   AchievementsResponse,
   Expense,
+  WorkTopic,
 } from './types';
 
 const BASE = '/api';
@@ -57,4 +58,11 @@ export const api = {
   updateExpense: (id: string, e: Partial<Expense>) =>
     request<Expense>(`/expenses/${id}`, { method: 'PUT', body: JSON.stringify(e) }),
   deleteExpense: (id: string) => request<void>(`/expenses/${id}`, { method: 'DELETE' }),
+
+  getWorkTopics: () => request<WorkTopic[]>('/work-topics'),
+  createWorkTopic: (label: string) =>
+    request<WorkTopic>('/work-topics', { method: 'POST', body: JSON.stringify({ label }) }),
+  updateWorkTopic: (id: string, patch: Partial<WorkTopic>) =>
+    request<WorkTopic>(`/work-topics/${id}`, { method: 'PUT', body: JSON.stringify(patch) }),
+  deleteWorkTopic: (id: string) => request<void>(`/work-topics/${id}`, { method: 'DELETE' }),
 };

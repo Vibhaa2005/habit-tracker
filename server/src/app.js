@@ -202,6 +202,55 @@ app.delete(
   })
 );
 
+// ---------- Work topics ----------
+
+app.get(
+  '/api/work-topics',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    res.json(db.workTopics);
+  })
+);
+
+app.post(
+  '/api/work-topics',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    const topic = {
+      id: uid('work'),
+      label: req.body.label || 'Untitled topic',
+      order: db.workTopics.length,
+      checklist: [],
+      resources: [],
+    };
+    db.workTopics.push(topic);
+    await saveDb(db);
+    res.status(201).json(topic);
+  })
+);
+
+app.put(
+  '/api/work-topics/:id',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    const idx = db.workTopics.findIndex((t) => t.id === req.params.id);
+    if (idx === -1) return res.status(404).json({ error: 'Not found' });
+    db.workTopics[idx] = { ...db.workTopics[idx], ...req.body, id: db.workTopics[idx].id };
+    await saveDb(db);
+    res.json(db.workTopics[idx]);
+  })
+);
+
+app.delete(
+  '/api/work-topics/:id',
+  asyncRoute(async (req, res) => {
+    const db = await loadDb();
+    db.workTopics = db.workTopics.filter((t) => t.id !== req.params.id);
+    await saveDb(db);
+    res.status(204).end();
+  })
+);
+
 // ---------- Exatest ----------
 
 app.get(
