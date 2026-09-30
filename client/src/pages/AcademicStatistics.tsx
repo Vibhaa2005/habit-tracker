@@ -127,6 +127,32 @@ export default function AcademicStatistics() {
             )}
           </SectionCard>
 
+          <SectionCard title="Study time" icon="⏱️">
+            {studyTotalMinutes === 0 ? (
+              <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
+                No study time logged in this range yet.
+              </p>
+            ) : (
+              <>
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="text-xs text-[var(--color-ink-soft)]">Daily average</span>
+                  <span className="text-xl font-bold text-[var(--color-green-700)]">{formatHM(studyDailyAvgMinutes)} / day</span>
+                </div>
+                <div className="h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={studyChartData}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                      <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
+                      <YAxis tick={{ fontSize: 10 }} width={30} unit="h" />
+                      <Tooltip formatter={(v: any) => [`${v}h`, 'Study time']} {...tooltipStyle} />
+                      <Bar dataKey="hours" fill="var(--color-blue-500)" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </>
+            )}
+          </SectionCard>
+
           {categories.map((cat, i) => {
             const chartData = days.map((d) => ({
               date: format(parseISO(d.date), 'MMM d'),
@@ -169,32 +195,6 @@ export default function AcademicStatistics() {
               </SectionCard>
             );
           })}
-
-          <SectionCard title="Study time" icon="⏱️">
-            {studyTotalMinutes === 0 ? (
-              <p className="text-sm text-[var(--color-ink-soft)] py-4 text-center">
-                No study time logged in this range yet.
-              </p>
-            ) : (
-              <>
-                <div className="flex items-baseline justify-between mb-3">
-                  <span className="text-xs text-[var(--color-ink-soft)]">Daily average</span>
-                  <span className="text-xl font-bold text-[var(--color-green-700)]">{formatHM(studyDailyAvgMinutes)} / day</span>
-                </div>
-                <div className="h-40">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={studyChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
-                      <XAxis dataKey="date" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-                      <YAxis tick={{ fontSize: 10 }} width={30} unit="h" />
-                      <Tooltip formatter={(v: any) => [`${v}h`, 'Study time']} {...tooltipStyle} />
-                      <Bar dataKey="hours" fill="var(--color-blue-500)" radius={[4, 4, 0, 0]} />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </>
-            )}
-          </SectionCard>
         </>
       )}
     </div>
