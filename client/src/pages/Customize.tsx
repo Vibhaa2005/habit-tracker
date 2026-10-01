@@ -49,7 +49,7 @@ export default function Customize() {
     <div className="space-y-4">
       <header className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5">
         <h1 className="text-xl font-semibold">Customize</h1>
-        <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">Everything here shapes what shows up on your Dashboard.</p>
+        <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">Everything here shapes what shows up on your Routine.</p>
       </header>
 
       <SectionCard title="Wake-up time" icon="⏰">
