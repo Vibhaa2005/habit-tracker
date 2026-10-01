@@ -20,6 +20,13 @@ function greeting() {
   return 'Good evening 🌙';
 }
 
+function daysUntilNewYear() {
+  const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const nextNewYear = new Date(now.getFullYear() + 1, 0, 1);
+  return Math.round((nextNewYear.getTime() - todayMidnight.getTime()) / 86400000);
+}
+
 export default function Dashboard() {
   const { selectedDate, dayResponse, assignments, achievements, loading } = useApp();
   const date = parseISO(selectedDate);
@@ -34,7 +41,8 @@ export default function Dashboard() {
     [assignments]
   );
 
-  const unlockedRecent = achievements.filter((a) => a.unlocked).slice(-4);
+  const unlockedRecent = achievements.filter((a) => a.unlocked && a.id !== 'first_day').slice(-4);
+  const newYearCountdown = daysUntilNewYear();
 
   if (loading || !dayResponse) {
     return (
@@ -70,20 +78,25 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {unlockedRecent.length > 0 && (
-        <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
-          {unlockedRecent.map((a) => (
-            <div
-              key={a.id}
-              title={a.description}
-              className="flex-shrink-0 flex items-center gap-1.5 bg-[var(--color-green-50)] text-[var(--color-green-900)] text-xs font-medium px-3 py-1.5 rounded-full"
-            >
-              <span>{a.emoji}</span>
-              {a.title}
-            </div>
-          ))}
+      <div className="flex gap-2 overflow-x-auto pb-1 -mx-1 px-1">
+        <div
+          title="Days remaining until January 1st"
+          className="flex-shrink-0 flex items-center gap-1.5 bg-[var(--color-amber-500)]/15 text-[var(--color-amber-500)] text-xs font-medium px-3 py-1.5 rounded-full"
+        >
+          <span>🎉</span>
+          {newYearCountdown} {newYearCountdown === 1 ? 'day' : 'days'} to New Year
         </div>
-      )}
+        {unlockedRecent.map((a) => (
+          <div
+            key={a.id}
+            title={a.description}
+            className="flex-shrink-0 flex items-center gap-1.5 bg-[var(--color-green-50)] text-[var(--color-green-900)] text-xs font-medium px-3 py-1.5 rounded-full"
+          >
+            <span>{a.emoji}</span>
+            {a.title}
+          </div>
+        ))}
+      </div>
 
       <MorningSection />
       <MealsSection />
