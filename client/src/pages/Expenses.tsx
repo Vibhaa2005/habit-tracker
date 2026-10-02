@@ -106,7 +106,6 @@ export default function Expenses() {
       <header className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5 flex items-center justify-between flex-wrap gap-3">
         <div>
           <h1 className="text-xl font-semibold">Expenses</h1>
-          <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">{expenses.length} logged</p>
         </div>
         <div className="flex gap-6">
           <div className="text-right">

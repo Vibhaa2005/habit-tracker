@@ -42,7 +42,6 @@ export default function Work() {
     <div className="space-y-4">
       <header className="bg-[var(--color-surface)] border border-[var(--color-border)] rounded-2xl p-5">
         <h1 className="text-xl font-semibold">Work</h1>
-        <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">Prep topics, checklists & resources</p>
       </header>
 
       {sorted.map((topic) => {
