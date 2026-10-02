@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { format, parseISO } from 'date-fns';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { SectionCard } from '../components/ui/SectionCard';
+import { StudyTimeGrid } from '../components/StudyTimeGrid';
 import { useApp, todayStr } from '../context/AppContext';
 import { api } from '../api';
 import type { ExatestState, StatsResponse } from '../types';
@@ -134,11 +135,12 @@ export default function AcademicStatistics() {
               </p>
             ) : (
               <>
-                <div className="flex items-baseline justify-between mb-3">
+                <div className="flex items-baseline justify-between mb-4">
                   <span className="text-xs text-[var(--color-ink-soft)]">Daily average</span>
                   <span className="text-xl font-bold text-[var(--color-green-700)]">{formatHM(studyDailyAvgMinutes)} / day</span>
                 </div>
-                <div className="h-40">
+                <StudyTimeGrid days={days} />
+                <div className="h-40 mt-5">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={studyChartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
