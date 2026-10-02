@@ -84,7 +84,7 @@ export default function Dashboard() {
           title="Days remaining until January 1st"
           className="flex-shrink-0 flex items-center gap-1.5 bg-[var(--color-amber-500)]/15 text-[var(--color-amber-500)] text-xs font-medium px-3 py-1.5 rounded-full"
         >
-          <span>🎉</span>
+          <span>⏰</span>
           {newYearCountdown} {newYearCountdown === 1 ? 'day' : 'days'} left
         </div>
         {unlockedRecent.map((a) => (
