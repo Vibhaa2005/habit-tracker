@@ -181,6 +181,7 @@ export interface WorkResource {
   id: string;
   label: string;
   url: string;
+  notes?: string;
 }
 
 export interface WorkTopic {

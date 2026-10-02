@@ -36,6 +36,10 @@ export function WorkTopicCard({
     onUpdate({ resources: topic.resources.filter((r) => r.id !== id) });
   }
 
+  function updateResourceNotes(id: string, notes: string) {
+    onUpdate({ resources: topic.resources.map((r) => (r.id === id ? { ...r, notes } : r)) });
+  }
+
   function addResource() {
     if (!newResourceLabel.trim() || !newResourceUrl.trim()) return;
     const url = /^https?:\/\//.test(newResourceUrl.trim()) ? newResourceUrl.trim() : `https://${newResourceUrl.trim()}`;
@@ -93,13 +97,24 @@ export function WorkTopicCard({
         <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Resources</p>
         <div className="flex flex-col gap-1">
           {topic.resources.map((r) => (
-            <div key={r.id} className="flex items-center gap-2 py-1">
-              <a href={r.url} target="_blank" rel="noreferrer" className="flex-1 text-sm text-[var(--color-blue-700)] hover:underline truncate">
-                🔗 {r.label}
-              </a>
-              <button onClick={() => removeResource(r.id)} className="text-xs text-[var(--color-red-500)] px-1">
-                ✕
-              </button>
+            <div key={r.id} className="py-1">
+              <div className="flex items-center gap-2">
+                <a href={r.url} target="_blank" rel="noreferrer" className="flex-1 text-sm text-[var(--color-blue-700)] hover:underline truncate">
+                  🔗 {r.label}
+                </a>
+                <button onClick={() => removeResource(r.id)} className="text-xs text-[var(--color-red-500)] px-1">
+                  ✕
+                </button>
+              </div>
+              <input
+                key={r.id + ':' + (r.notes ?? '')}
+                defaultValue={r.notes ?? ''}
+                onBlur={(e) => {
+                  if (e.target.value !== (r.notes ?? '')) updateResourceNotes(r.id, e.target.value);
+                }}
+                placeholder="Add a short note..."
+                className="input w-full py-1 text-xs mt-1"
+              />
             </div>
           ))}
           {topic.resources.length === 0 && <p className="text-sm text-[var(--color-ink-soft)] py-1">No resources yet.</p>}
