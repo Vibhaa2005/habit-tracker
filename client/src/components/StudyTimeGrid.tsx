@@ -41,7 +41,6 @@ export function StudyTimeGrid({ days }: { days: StatsDay[] }) {
 
   return (
     <div>
-      <p className="text-xs font-semibold uppercase tracking-wide text-[var(--color-ink-soft)] mb-2">Study time consistency</p>
       <div className="overflow-x-auto pb-2">
         <div className="flex gap-2">
           <div

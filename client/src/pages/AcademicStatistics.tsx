@@ -101,6 +101,10 @@ export default function AcademicStatistics() {
         <div className="h-40 rounded-2xl bg-[var(--color-surface-muted)] animate-pulse" />
       ) : (
         <>
+          <SectionCard title="Study time consistency" icon="⏱️">
+            <StudyTimeGrid days={days} />
+          </SectionCard>
+
           <SectionCard title="Revision" icon="📖">
             <p className="text-xs text-[var(--color-ink-soft)]">Completion</p>
             <p className="text-2xl font-bold text-[var(--color-green-700)]">
@@ -139,8 +143,7 @@ export default function AcademicStatistics() {
                   <span className="text-xs text-[var(--color-ink-soft)]">Daily average</span>
                   <span className="text-xl font-bold text-[var(--color-green-700)]">{formatHM(studyDailyAvgMinutes)} / day</span>
                 </div>
-                <StudyTimeGrid days={days} />
-                <div className="h-40 mt-5">
+                <div className="h-40">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={studyChartData}>
                       <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
