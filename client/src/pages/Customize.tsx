@@ -113,6 +113,10 @@ export default function Customize() {
         <RoutineListEditor items={draft.nightRoutine} onChange={(items) => persist({ nightRoutine: items }, 'night')} />
       </SectionCard>
 
+      <SectionCard title="Did you avoid?" icon="🚫">
+        <RoutineListEditor items={draft.avoidChecklist} onChange={(items) => persist({ avoidChecklist: items }, 'avoidChecklist')} />
+      </SectionCard>
+
       <SectionCard title="Sleep targets" icon="😴">
         <div className="grid grid-cols-3 gap-3">
           <label className="flex flex-col gap-1">

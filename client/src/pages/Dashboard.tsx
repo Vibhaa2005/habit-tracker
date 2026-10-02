@@ -11,6 +11,7 @@ import { HydrationSection } from '../components/sections/HydrationSection';
 import { MovementSection } from '../components/sections/MovementSection';
 import { WeeklyCareSection } from '../components/sections/WeeklyCareSection';
 import { NightSection } from '../components/sections/NightSection';
+import { AvoidSection } from '../components/sections/AvoidSection';
 import { SleepSection } from '../components/sections/SleepSection';
 
 function greeting() {
@@ -104,6 +105,7 @@ export default function Dashboard() {
       <MovementSection />
       <WeeklyCareSection />
       <NightSection />
+      <AvoidSection />
 
       <SectionCard
         title="Academics"

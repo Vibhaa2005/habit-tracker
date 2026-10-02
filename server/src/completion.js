@@ -8,6 +8,7 @@ function emptyDay() {
     hydration: { litersConsumed: 0 },
     movement: {},
     movementDurations: {},
+    avoid: {},
     night: {},
     sleep: { bedtime: null, wakeTime: null, durationMinutes: null },
     academics: {
@@ -34,6 +35,7 @@ function getDay(dailyData, dateStr) {
     meals: { ...(stored.meals || {}) },
     movement: { ...(stored.movement || {}) },
     movementDurations: { ...(stored.movementDurations || {}) },
+    avoid: { ...(stored.avoid || {}) },
     night: { ...(stored.night || {}) },
     recurringTasks: { ...(stored.recurringTasks || {}) },
   };
@@ -76,6 +78,10 @@ function activeItems(settings, day, dateStr) {
 
   for (const item of settings.movement.filter((i) => i.enabled)) {
     items.push({ section: 'movement', id: item.id, label: item.label, completed: !!day.movement[item.id] });
+  }
+
+  for (const item of settings.avoidChecklist.filter((i) => i.enabled)) {
+    items.push({ section: 'avoid', id: item.id, label: item.label, completed: !!day.avoid[item.id] });
   }
 
   for (const item of settings.nightRoutine.filter((i) => i.enabled)) {
@@ -136,6 +142,7 @@ function computeCompletion(settings, dailyData, dateStr) {
       meals: pct('meals'),
       hydration: pct('hydration'),
       movement: pct('movement'),
+      avoid: pct('avoid'),
       night: pct('night'),
       academics: pct('academics'),
       recurring: pct('recurring'),

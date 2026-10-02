@@ -33,6 +33,7 @@ export interface Settings {
   nightRoutine: RoutineItem[];
   meals: RoutineItem[];
   movement: RoutineItem[];
+  avoidChecklist: RoutineItem[];
   foodTargets: { eggs: number; fruits: number };
   hydration: { targetLiters: number };
   sleepTargets: { bedtime: string; wakeTime: string; durationHours: number };
@@ -61,6 +62,7 @@ export interface DayData {
   hydration: { litersConsumed: number };
   movement: Record<string, boolean>;
   movementDurations: Record<string, number>;
+  avoid: Record<string, boolean>;
   night: Record<string, boolean>;
   sleep: DaySleep;
   academics: DayAcademics;
@@ -72,6 +74,7 @@ export interface CompletionSections {
   meals: number | null;
   hydration: number | null;
   movement: number | null;
+  avoid: number | null;
   night: number | null;
   academics: number | null;
   recurring: number | null;

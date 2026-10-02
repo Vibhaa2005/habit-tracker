@@ -43,6 +43,12 @@ const MOVEMENT = [
   { id: 'postDinnerWalk', label: 'Post-dinner walk', enabled: true, order: 1, trackDuration: true },
 ];
 
+const AVOID_CHECKLIST = [
+  { id: 'junk', label: 'Junk', enabled: true, order: 0 },
+  { id: 'scrolling', label: 'Scrolling', enabled: true, order: 1 },
+  { id: 'expressions', label: 'Expressions', enabled: true, order: 2 },
+];
+
 const EXPENSE_REASONS = [
   { id: 'food', label: 'Food', enabled: true, order: 0 },
   { id: 'transport', label: 'Transport', enabled: true, order: 1 },
@@ -160,6 +166,7 @@ function defaultSettings() {
     nightRoutine: NIGHT_ROUTINE,
     meals: MEALS,
     movement: MOVEMENT,
+    avoidChecklist: AVOID_CHECKLIST,
     foodTargets: { eggs: 2, fruits: 2 },
     hydration: { targetLiters: 2.5 },
     sleepTargets: { bedtime: '22:30', wakeTime: '06:00', durationHours: 7.5 },
