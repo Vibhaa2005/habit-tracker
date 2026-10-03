@@ -4,12 +4,15 @@ import { SectionCard } from '../components/ui/SectionCard';
 import { RoutineListEditor } from '../components/customize/RoutineListEditor';
 import { RecurringTasksEditor } from '../components/customize/RecurringTasksEditor';
 import { AcademicCategoriesEditor } from '../components/customize/AcademicCategoriesEditor';
+import { api } from '../api';
 import type { Settings } from '../types';
 
 export default function Customize() {
   const { settings, saveSettings, pushToast } = useApp();
   const [draft, setDraft] = useState<Settings | null>(settings);
   const [savingKey, setSavingKey] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
+  const importInputRef = useRef<HTMLInputElement>(null);
   const draftRef = useRef<Settings | null>(settings);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -43,6 +46,32 @@ export default function Customize() {
       setSavingKey(null);
       pushToast('✓ Settings updated');
     }, 500);
+  }
+
+  async function handleImportFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // allow re-selecting the same file next time
+    if (!file) return;
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(await file.text());
+    } catch {
+      pushToast('That file is not valid JSON');
+      return;
+    }
+
+    if (!confirm('This will replace everything currently in the app with the contents of this file. Continue?')) return;
+
+    setImporting(true);
+    try {
+      await api.importData(parsed);
+      pushToast('✓ Data restored');
+      window.location.reload();
+    } catch (err) {
+      setImporting(false);
+      pushToast(err instanceof Error ? err.message : 'Import failed');
+    }
   }
 
   return (
@@ -178,6 +207,22 @@ export default function Customize() {
         >
           Download my data
         </a>
+      </SectionCard>
+
+      <SectionCard title="Data import" icon="⬆️">
+        <p className="text-sm text-[var(--color-ink-soft)] mb-3">
+          Restore everything from a previously downloaded export file. This replaces all current data — settings, daily
+          history, assignments, expenses, work topics — with what's in the file, so nothing is lost as long as you have
+          an export to restore from.
+        </p>
+        <input ref={importInputRef} type="file" accept=".json,application/json" onChange={handleImportFile} className="hidden" />
+        <button
+          onClick={() => importInputRef.current?.click()}
+          disabled={importing}
+          className="text-sm font-medium px-4 py-2 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] disabled:opacity-50"
+        >
+          {importing ? 'Restoring…' : 'Import data'}
+        </button>
       </SectionCard>
 
       {savingKey && <p className="text-xs text-center text-[var(--color-ink-soft)]">Saving…</p>}

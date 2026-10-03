@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { loadDb, saveDb } = require('./store');
-const { uid } = require('./defaults');
+const { uid, defaultDb } = require('./defaults');
 const { computeCompletion, getDay } = require('./completion');
 const { tasksDueOn } = require('./recurrence');
 const { computeSleepDuration } = require('./sleep');
@@ -9,7 +9,7 @@ const { getAchievements } = require('./achievements');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: '15mb' }));
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 const todayStr = () => new Date().toISOString().slice(0, 10);
@@ -379,6 +379,29 @@ app.get(
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Content-Disposition', `attachment; filename="lifeos-export-${todayStr()}.json"`);
     res.send(JSON.stringify(db, null, 2));
+  })
+);
+
+// Restores everything from a previously exported file. Backfilled against
+// current defaults (both top-level keys and settings sub-keys) so an older
+// export — missing fields added since it was taken — still loads instead of
+// crashing other routes on an undefined settings field.
+app.post(
+  '/api/import',
+  asyncRoute(async (req, res) => {
+    const incoming = req.body;
+    if (!incoming || typeof incoming !== 'object' || Array.isArray(incoming) || !incoming.settings) {
+      return res.status(400).json({ error: "That file doesn't look like a LifeOS export." });
+    }
+    const fresh = defaultDb();
+    const merged = {
+      ...fresh,
+      ...incoming,
+      settings: { ...fresh.settings, ...(incoming.settings || {}) },
+      exatest: { ...fresh.exatest, ...(incoming.exatest || {}) },
+    };
+    await saveDb(merged);
+    res.json({ ok: true });
   })
 );
 

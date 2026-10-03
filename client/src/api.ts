@@ -65,4 +65,6 @@ export const api = {
   updateWorkTopic: (id: string, patch: Partial<WorkTopic>) =>
     request<WorkTopic>(`/work-topics/${id}`, { method: 'PUT', body: JSON.stringify(patch) }),
   deleteWorkTopic: (id: string) => request<void>(`/work-topics/${id}`, { method: 'DELETE' }),
+
+  importData: (data: unknown) => request<{ ok: boolean }>('/import', { method: 'POST', body: JSON.stringify(data) }),
 };
