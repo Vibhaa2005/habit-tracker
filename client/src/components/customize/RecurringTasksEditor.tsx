@@ -89,8 +89,8 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
           </div>
         )}
         {task.frequencyType === 'everyNDays' && (
-          <label className="flex items-center gap-2 text-sm">
-            Every
+          <>
+            <span className="text-sm text-[var(--color-ink-soft)]">Every</span>
             <input
               type="number"
               min={1}
@@ -98,28 +98,28 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
               onChange={(e) => onUpdate({ intervalDays: Number(e.target.value) || null })}
               className="input w-16 py-1"
             />
-            days, starting
+            <span className="text-sm text-[var(--color-ink-soft)]">days, starting</span>
             <input
               type="date"
               value={task.anchorDate ?? ''}
               onChange={(e) => onUpdate({ anchorDate: e.target.value })}
-              className="input w-auto py-1"
+              className="input py-1 w-36 max-w-full"
             />
-          </label>
+          </>
         )}
         {task.frequencyType === 'monthly' && (
-          <label className="flex items-center gap-2 text-sm">
-            On this date each month
+          <>
+            <span className="text-sm text-[var(--color-ink-soft)]">On this date each month</span>
             <input
               type="date"
               value={task.anchorDate ?? ''}
               onChange={(e) => onUpdate({ anchorDate: e.target.value })}
-              className="input w-auto py-1"
+              className="input py-1 w-36 max-w-full"
             />
             <select
               value={task.emoji ?? ''}
               onChange={(e) => onUpdate({ emoji: e.target.value || null })}
-              className="input w-auto py-1"
+              className="input py-1 w-40 max-w-full basis-full"
             >
               <option value="">No emoji</option>
               {MONTHLY_EMOJIS.map((e) => (
@@ -128,7 +128,7 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
                 </option>
               ))}
             </select>
-          </label>
+          </>
         )}
       </>
     );
@@ -137,39 +137,38 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
   return (
     <div className="flex flex-col gap-3">
       {tasks.map((task) => (
-        <div key={task.id} className={`rounded-xl border border-[var(--color-border)] p-3 ${!task.enabled ? 'opacity-50' : ''}`}>
-          <div className="flex items-center gap-2 mb-2">
-            <input type="checkbox" checked={task.enabled} onChange={() => update(task.id, { enabled: !task.enabled })} />
-            <input value={task.label} onChange={(e) => update(task.id, { label: e.target.value })} className="input flex-1 py-1" />
+        <div key={task.id} className="rounded-xl border border-[var(--color-border)] p-3">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
+            <input value={task.label} onChange={(e) => update(task.id, { label: e.target.value })} className="input flex-1 py-1 min-w-[100px]" />
             <input
               value={task.category}
               onChange={(e) => update(task.id, { category: e.target.value })}
               placeholder="Category"
-              className="input w-32 py-1"
+              className="input w-28 py-1"
             />
             <button onClick={() => remove(task.id)} className="w-6 h-6 text-xs text-[var(--color-red-500)] flex-shrink-0">
               ✕
             </button>
           </div>
-          <div className="flex items-center gap-2 flex-wrap pl-6">{renderFrequencyControls(task, (patch) => update(task.id, patch))}</div>
+          <div className="flex items-center gap-2 flex-wrap pl-2">{renderFrequencyControls(task, (patch) => update(task.id, patch))}</div>
         </div>
       ))}
 
       {draft ? (
         <div className="rounded-xl border-2 border-dashed border-[var(--color-green-300)] p-3">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-2 flex-wrap">
             <input
               value={draft.label}
               onChange={(e) => setDraft({ ...draft, label: e.target.value })}
               placeholder="Task name"
-              className="input flex-1 py-1"
+              className="input flex-1 py-1 min-w-[100px]"
               autoFocus
             />
             <input
               value={draft.category}
               onChange={(e) => setDraft({ ...draft, category: e.target.value })}
               placeholder="Category"
-              className="input w-32 py-1"
+              className="input w-28 py-1"
             />
           </div>
           <div className="flex items-center gap-2 flex-wrap pl-1 mb-3">{renderFrequencyControls(draft, (patch) => setDraft({ ...draft, ...patch }))}</div>
