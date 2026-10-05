@@ -6,7 +6,7 @@ export interface RoutineItem {
   trackDuration?: boolean;
 }
 
-export type FrequencyType = 'daily' | 'weekly' | 'biweekly' | 'everyNDays';
+export type FrequencyType = 'daily' | 'weekly' | 'biweekly' | 'everyNDays' | 'monthly';
 
 export interface RecurringTask {
   id: string;

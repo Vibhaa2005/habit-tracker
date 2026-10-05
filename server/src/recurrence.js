@@ -1,5 +1,5 @@
 // Recurrence engine: decides whether a recurring task is "due" on a given date.
-// Supported frequencyType values: 'daily' | 'weekly' | 'biweekly' | 'everyNDays'
+// Supported frequencyType values: 'daily' | 'weekly' | 'biweekly' | 'everyNDays' | 'monthly'
 
 function parseDate(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
@@ -39,6 +39,11 @@ function isDue(task, dateStr) {
       const diff = daysBetween(task.anchorDate, dateStr);
       if (diff < 0) return false;
       return diff % task.intervalDays === 0;
+    }
+
+    case 'monthly': {
+      if (!task.anchorDate) return false;
+      return parseDate(task.anchorDate).getUTCDate() === parseDate(dateStr).getUTCDate();
     }
 
     default:

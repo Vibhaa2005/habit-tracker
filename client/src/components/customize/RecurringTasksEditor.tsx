@@ -11,6 +11,7 @@ const FREQUENCIES: { value: FrequencyType; label: string }[] = [
   { value: 'weekly', label: 'Specific weekdays' },
   { value: 'biweekly', label: 'Every 2 weeks (on weekday)' },
   { value: 'everyNDays', label: 'Every N days' },
+  { value: 'monthly', label: 'Once a month' },
 ];
 
 function todayStr() {
@@ -97,6 +98,17 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
               className="input w-16 py-1"
             />
             days, starting
+            <input
+              type="date"
+              value={task.anchorDate ?? ''}
+              onChange={(e) => onUpdate({ anchorDate: e.target.value })}
+              className="input w-auto py-1"
+            />
+          </label>
+        )}
+        {task.frequencyType === 'monthly' && (
+          <label className="flex items-center gap-2 text-sm">
+            On this date each month
             <input
               type="date"
               value={task.anchorDate ?? ''}
