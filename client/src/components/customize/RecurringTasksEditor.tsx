@@ -6,7 +6,7 @@ function uid() {
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-const MONTHLY_EMOJIS = ['💰', '🏠', '🧾', '💳', '📄', '🎂', '🎉', '🍲', '🧴', '💊', '🚗', '🏥', '✂️', '🔧', '🧹', '📅', '📚', '🌳', '🏖️'];
+const MONTHLY_EMOJIS = ['💰', '🏠', '🧾', '💳', '📄', '🎂', '🎉', '🍲', '🧴', '💊', '🚗', '🏥', '✂️', '🔧', '🧹', '📅', '📚', '🌳', '🏖️', '🏋️'];
 const FREQUENCIES: { value: FrequencyType; label: string }[] = [
   { value: 'daily', label: 'Every day' },
   { value: 'weekly', label: 'Specific weekdays' },
