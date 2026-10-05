@@ -37,6 +37,11 @@ export function RoutineListEditor({
     onChange(items.map((i) => (i.id === id ? { ...i, trackDuration: !i.trackDuration } : i)));
   }
 
+  function setTargetDuration(id: string, value: string) {
+    const targetDurationMin = value === '' ? null : Number(value) || null;
+    onChange(items.map((i) => (i.id === id ? { ...i, targetDurationMin } : i)));
+  }
+
   function remove(id: string) {
     onChange(items.filter((i) => i.id !== id));
   }
@@ -62,6 +67,16 @@ export function RoutineListEditor({
               <input type="checkbox" checked={!!item.trackDuration} onChange={() => toggleDuration(item.id)} />
               duration
             </label>
+          )}
+          {trackDurationOption && item.trackDuration && (
+            <input
+              type="number"
+              min={0}
+              placeholder="target min"
+              value={item.targetDurationMin ?? ''}
+              onChange={(e) => setTargetDuration(item.id, e.target.value)}
+              className="input w-20 py-1 text-xs flex-shrink-0"
+            />
           )}
           <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
             ↑

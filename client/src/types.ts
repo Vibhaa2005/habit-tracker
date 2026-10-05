@@ -4,6 +4,7 @@ export interface RoutineItem {
   enabled: boolean;
   order: number;
   trackDuration?: boolean;
+  targetDurationMin?: number | null;
 }
 
 export type FrequencyType = 'daily' | 'weekly' | 'biweekly' | 'everyNDays' | 'monthly';

@@ -25,18 +25,23 @@ export function MovementSection() {
                 />
               </div>
               {item.trackDuration && checked && (
-                <input
-                  type="number"
-                  min={0}
-                  placeholder="min"
-                  aria-label={`${item.label} duration in minutes`}
-                  defaultValue={duration ?? ''}
-                  onBlur={(e) => {
-                    const val = e.target.value === '' ? undefined : Number(e.target.value);
-                    patchDay({ movementDurations: { [item.id]: val } });
-                  }}
-                  className="w-16 text-sm text-center border border-[var(--color-border)] rounded-lg py-1 bg-[var(--color-surface)]"
-                />
+                <div className="flex items-center gap-1">
+                  <input
+                    type="number"
+                    min={0}
+                    placeholder="min"
+                    aria-label={`${item.label} duration in minutes`}
+                    defaultValue={duration ?? ''}
+                    onBlur={(e) => {
+                      const val = e.target.value === '' ? undefined : Number(e.target.value);
+                      patchDay({ movementDurations: { [item.id]: val } });
+                    }}
+                    className="w-16 text-sm text-center border border-[var(--color-border)] rounded-lg py-1 bg-[var(--color-surface)]"
+                  />
+                  {!!item.targetDurationMin && (
+                    <span className="text-xs text-[var(--color-ink-soft)] flex-shrink-0">/ {item.targetDurationMin} min</span>
+                  )}
+                </div>
               )}
             </div>
           );
