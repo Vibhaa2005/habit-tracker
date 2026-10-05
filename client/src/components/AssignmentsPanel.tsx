@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { format, isPast, parseISO } from 'date-fns';
+import { differenceInCalendarDays, format, isPast, parseISO } from 'date-fns';
 import { useApp } from '../context/AppContext';
 import type { Assignment, AssignmentStatus } from '../types';
 
@@ -83,6 +83,9 @@ export function AssignmentsPanel() {
         <ul className="flex flex-col gap-2">
           {sorted.map((a) => {
             const overdue = a.deadline && isPast(parseISO(a.deadline)) && a.status !== 'Completed';
+            const daysLeft = a.deadline && !overdue ? differenceInCalendarDays(parseISO(a.deadline), new Date()) : null;
+            const daysLeftLabel =
+              daysLeft === null ? null : daysLeft === 0 ? 'Due today' : daysLeft === 1 ? '1 day left' : `${daysLeft} days left`;
             return (
               <li
                 key={a.id}
@@ -91,10 +94,17 @@ export function AssignmentsPanel() {
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
                     <p className="font-medium text-[15px] truncate">{a.name}</p>
-                    <p className="text-xs text-[var(--color-ink-soft)] mt-0.5">
-                      {a.subject || 'General'}
-                      {a.deadline && ` · Due ${format(parseISO(a.deadline), 'MMM d')}`}
-                      {overdue && ' · Overdue'}
+                    <p className="text-xs text-[var(--color-ink-soft)] mt-0.5 flex items-center flex-wrap gap-1.5">
+                      <span>
+                        {a.subject || 'General'}
+                        {a.deadline && ` · Due ${format(parseISO(a.deadline), 'MMM d')}`}
+                        {overdue && ' · Overdue'}
+                      </span>
+                      {daysLeftLabel && (
+                        <span className="px-1.5 py-0.5 rounded-md bg-[var(--color-surface-muted)] text-[10px] font-medium text-[var(--color-ink-soft)]">
+                          {daysLeftLabel}
+                        </span>
+                      )}
                     </p>
                   </div>
                   <span
