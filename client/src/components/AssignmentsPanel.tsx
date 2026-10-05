@@ -101,7 +101,7 @@ export function AssignmentsPanel() {
                         {overdue && ' · Overdue'}
                       </span>
                       {daysLeftLabel && (
-                        <span className="px-1.5 py-0.5 rounded-md bg-[var(--color-surface-muted)] text-[10px] font-medium text-[var(--color-ink-soft)]">
+                        <span className="px-1.5 py-0.5 rounded-md bg-[var(--color-red-500)]/15 text-[10px] font-medium text-[var(--color-red-500)]">
                           {daysLeftLabel}
                         </span>
                       )}
