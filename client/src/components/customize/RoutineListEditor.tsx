@@ -63,19 +63,22 @@ export function RoutineListEditor({
             className={`input flex-1 py-1 ${!item.enabled ? 'opacity-50' : ''}`}
           />
           {trackDurationOption && (
-            <label className="flex items-center gap-1 text-xs text-[var(--color-ink-soft)] flex-shrink-0">
-              <input type="checkbox" checked={!!item.trackDuration} onChange={() => toggleDuration(item.id)} />
-              duration
-            </label>
+            <input
+              type="checkbox"
+              checked={!!item.trackDuration}
+              onChange={() => toggleDuration(item.id)}
+              title="Track duration"
+              className="flex-shrink-0"
+            />
           )}
           {trackDurationOption && item.trackDuration && (
             <input
               type="number"
               min={0}
-              placeholder="target min"
+              placeholder="min"
               value={item.targetDurationMin ?? ''}
               onChange={(e) => setTargetDuration(item.id, e.target.value)}
-              className="input w-20 py-1 text-xs flex-shrink-0"
+              className="input w-14 py-1 text-xs flex-shrink-0"
             />
           )}
           <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
