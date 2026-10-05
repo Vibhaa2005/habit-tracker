@@ -17,7 +17,7 @@ export function MorningSection() {
             key={item.id}
             label={item.label}
             checked={!!dayResponse.day.morning[item.id]}
-            meta={item.id === 'wakeUp' ? formatTime(settings.wakeUpTime) : undefined}
+            meta={item.id === 'wakeUp' ? formatTime(settings.sleepTargets.wakeTime) : undefined}
             onToggle={(next) =>
               patchDay({ morning: { [item.id]: next } }, next ? '✓ Completed' : undefined)
             }

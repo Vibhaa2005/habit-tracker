@@ -81,29 +81,6 @@ export default function Customize() {
         <p className="text-sm text-[var(--color-ink-soft)] mt-0.5">Everything here shapes what shows up on your Routine.</p>
       </header>
 
-      <SectionCard title="Wake-up time" icon="⏰">
-        <div className="flex flex-col gap-3">
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-[var(--color-ink-soft)]">Wake-up time</span>
-            <input
-              type="time"
-              value={draft.wakeUpTime}
-              onChange={(e) => persist({ wakeUpTime: e.target.value }, 'wakeUpTime')}
-              className="input w-40"
-            />
-          </label>
-          <label className="flex flex-col gap-1">
-            <span className="text-xs text-[var(--color-ink-soft)]">Sleep time</span>
-            <input
-              type="time"
-              value={draft.sleepTargets.bedtime}
-              onChange={(e) => persist({ sleepTargets: { ...draft.sleepTargets, bedtime: e.target.value } }, 'bedtime')}
-              className="input w-40"
-            />
-          </label>
-        </div>
-      </SectionCard>
-
       <SectionCard title="Morning routine" icon="🌅">
         <RoutineListEditor items={draft.morningRoutine} onChange={(items) => persist({ morningRoutine: items }, 'morning')} />
       </SectionCard>
