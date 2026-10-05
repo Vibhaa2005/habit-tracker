@@ -6,6 +6,7 @@ function uid() {
 }
 
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHLY_EMOJIS = ['💰', '🏠', '🧾', '💳', '📄', '🎂', '💊', '🚗', '🏥', '✂️', '🔧', '🧹', '📅', '📚'];
 const FREQUENCIES: { value: FrequencyType; label: string }[] = [
   { value: 'daily', label: 'Every day' },
   { value: 'weekly', label: 'Specific weekdays' },
@@ -115,6 +116,18 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
               onChange={(e) => onUpdate({ anchorDate: e.target.value })}
               className="input w-auto py-1"
             />
+            <select
+              value={task.emoji ?? ''}
+              onChange={(e) => onUpdate({ emoji: e.target.value || null })}
+              className="input w-auto py-1"
+            >
+              <option value="">No emoji</option>
+              {MONTHLY_EMOJIS.map((e) => (
+                <option key={e} value={e}>
+                  {e}
+                </option>
+              ))}
+            </select>
           </label>
         )}
       </>

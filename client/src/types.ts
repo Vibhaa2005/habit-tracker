@@ -17,6 +17,7 @@ export interface RecurringTask {
   intervalDays: number | null;
   anchorDate: string | null;
   enabled: boolean;
+  emoji?: string | null;
 }
 
 export interface AcademicCategory {

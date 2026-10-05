@@ -66,7 +66,7 @@ export default function Academics() {
           .map((task) => (
             <CheckRow
               key={task.id}
-              label={task.label}
+              label={task.emoji ? `${task.emoji} ${task.label}` : task.label}
               checked={!!dayResponse.day.recurringTasks[task.id]}
               onToggle={(next) =>
                 patchDay({ recurringTasks: { [task.id]: next } }, next ? '✓ Completed' : undefined)
