@@ -60,7 +60,7 @@ export function AcademicCategoriesEditor({
             onChange={(e) => rename(item.id, e.target.value)}
             className={`input flex-1 py-1 ${!item.enabled ? 'opacity-50' : ''}`}
           />
-          <label className="flex items-center gap-1 text-xs text-[var(--color-ink-soft)] flex-shrink-0">
+          <label className="flex items-center gap-1 text-xs text-[var(--color-ink-soft)] flex-shrink-0 ml-2">
             target
             <input
               type="number"
@@ -70,19 +70,21 @@ export function AcademicCategoriesEditor({
               className="input w-16 py-1"
             />
           </label>
-          <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
-            ↑
-          </button>
-          <button
-            onClick={() => move(i, 1)}
-            disabled={i === sorted.length - 1}
-            className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30"
-          >
-            ↓
-          </button>
-          <button onClick={() => remove(item.id)} className="w-6 h-6 text-xs text-[var(--color-red-500)]">
-            ✕
-          </button>
+          <div className="flex items-center gap-0.5 flex-shrink-0">
+            <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
+              ↑
+            </button>
+            <button
+              onClick={() => move(i, 1)}
+              disabled={i === sorted.length - 1}
+              className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30"
+            >
+              ↓
+            </button>
+            <button onClick={() => remove(item.id)} className="w-6 h-6 text-xs text-[var(--color-red-500)]">
+              ✕
+            </button>
+          </div>
         </div>
       ))}
       <div className="flex items-center gap-2 pt-2 mt-1 border-t border-[var(--color-border)]">

@@ -68,7 +68,7 @@ export function RoutineListEditor({
               checked={!!item.trackDuration}
               onChange={() => toggleDuration(item.id)}
               title="Track duration"
-              className="flex-shrink-0"
+              className="flex-shrink-0 ml-2"
             />
           )}
           {trackDurationOption && item.trackDuration && (
@@ -81,19 +81,21 @@ export function RoutineListEditor({
               className="input w-14 py-1 text-xs flex-shrink-0"
             />
           )}
-          <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
-            ↑
-          </button>
-          <button
-            onClick={() => move(i, 1)}
-            disabled={i === sorted.length - 1}
-            className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30"
-          >
-            ↓
-          </button>
-          <button onClick={() => remove(item.id)} className="w-6 h-6 text-xs text-[var(--color-red-500)]">
-            ✕
-          </button>
+          <div className="flex items-center gap-0.5 flex-shrink-0">
+            <button onClick={() => move(i, -1)} disabled={i === 0} className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30">
+              ↑
+            </button>
+            <button
+              onClick={() => move(i, 1)}
+              disabled={i === sorted.length - 1}
+              className="w-6 h-6 text-xs text-[var(--color-ink-soft)] disabled:opacity-30"
+            >
+              ↓
+            </button>
+            <button onClick={() => remove(item.id)} className="w-6 h-6 text-xs text-[var(--color-red-500)]">
+              ✕
+            </button>
+          </div>
         </div>
       ))}
       <div className="flex items-center gap-2 pt-2 mt-1 border-t border-[var(--color-border)]">
