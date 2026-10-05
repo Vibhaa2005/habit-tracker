@@ -137,8 +137,9 @@ export function RecurringTasksEditor({ tasks, onChange }: { tasks: RecurringTask
   return (
     <div className="flex flex-col gap-3">
       {tasks.map((task) => (
-        <div key={task.id} className="rounded-xl border border-[var(--color-border)] p-3">
+        <div key={task.id} className={`rounded-xl border border-[var(--color-border)] p-3 ${!task.enabled ? 'opacity-50' : ''}`}>
           <div className="flex items-center gap-2 mb-2">
+            <input type="checkbox" checked={task.enabled} onChange={() => update(task.id, { enabled: !task.enabled })} />
             <input value={task.label} onChange={(e) => update(task.id, { label: e.target.value })} className="input flex-1 py-1" />
             <input
               value={task.category}

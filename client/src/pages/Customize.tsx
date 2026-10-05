@@ -106,6 +106,7 @@ export default function Customize() {
             </label>
           ))}
         </div>
+        <p className="text-xs text-[var(--color-ink-soft)] mt-2">Nuts/Seeds is a plain daily checkbox — no target to set.</p>
       </SectionCard>
 
       <SectionCard title="Hydration" icon="💧">

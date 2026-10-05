@@ -25,6 +25,10 @@ export function RoutineListEditor({
     onChange(copy.map((item, i) => ({ ...item, order: i })));
   }
 
+  function toggleEnabled(id: string) {
+    onChange(items.map((i) => (i.id === id ? { ...i, enabled: !i.enabled } : i)));
+  }
+
   function rename(id: string, label: string) {
     onChange(items.map((i) => (i.id === id ? { ...i, label } : i)));
   }
@@ -52,10 +56,11 @@ export function RoutineListEditor({
     <div className="flex flex-col gap-1">
       {sorted.map((item, i) => (
         <div key={item.id} className="flex items-center gap-2 py-1.5">
+          <input type="checkbox" checked={item.enabled} onChange={() => toggleEnabled(item.id)} title="Enabled" />
           <input
             value={item.label}
             onChange={(e) => rename(item.id, e.target.value)}
-            className="input flex-1 py-1"
+            className={`input flex-1 py-1 ${!item.enabled ? 'opacity-50' : ''}`}
           />
           {trackDurationOption && (
             <label className="flex items-center gap-1 text-xs text-[var(--color-ink-soft)] flex-shrink-0">
