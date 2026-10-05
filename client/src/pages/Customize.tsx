@@ -197,32 +197,23 @@ export default function Customize() {
         <RoutineListEditor items={draft.expenseReasons} onChange={(items) => persist({ expenseReasons: items }, 'expenseReasons')} />
       </SectionCard>
 
-      <SectionCard title="Data export" icon="⬇️">
-        <p className="text-sm text-[var(--color-ink-soft)] mb-3">
-          Download everything you've logged — settings, daily history, assignments, expenses, work topics — as a single JSON file.
-        </p>
-        <a
-          href="/api/export"
-          className="inline-block text-sm font-medium px-4 py-2 rounded-xl bg-[var(--color-green-500)] text-white hover:bg-[var(--color-green-700)]"
-        >
-          Download my data
-        </a>
-      </SectionCard>
-
-      <SectionCard title="Data import" icon="⬆️">
-        <p className="text-sm text-[var(--color-ink-soft)] mb-3">
-          Restore everything from a previously downloaded export file. This replaces all current data — settings, daily
-          history, assignments, expenses, work topics — with what's in the file, so nothing is lost as long as you have
-          an export to restore from.
-        </p>
-        <input ref={importInputRef} type="file" accept=".json,application/json" onChange={handleImportFile} className="hidden" />
-        <button
-          onClick={() => importInputRef.current?.click()}
-          disabled={importing}
-          className="text-sm font-medium px-4 py-2 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] disabled:opacity-50"
-        >
-          {importing ? 'Restoring…' : 'Import data'}
-        </button>
+      <SectionCard title="Data" icon="⬇️">
+        <div className="flex gap-2">
+          <a
+            href="/api/export"
+            className="inline-block text-sm font-medium px-4 py-2 rounded-xl bg-[var(--color-green-500)] text-white hover:bg-[var(--color-green-700)]"
+          >
+            Export data
+          </a>
+          <input ref={importInputRef} type="file" accept=".json,application/json" onChange={handleImportFile} className="hidden" />
+          <button
+            onClick={() => importInputRef.current?.click()}
+            disabled={importing}
+            className="text-sm font-medium px-4 py-2 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-muted)] disabled:opacity-50"
+          >
+            {importing ? 'Restoring…' : 'Import data'}
+          </button>
+        </div>
       </SectionCard>
 
       {savingKey && <p className="text-xs text-center text-[var(--color-ink-soft)]">Saving…</p>}
