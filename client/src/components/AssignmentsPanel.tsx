@@ -83,7 +83,8 @@ export function AssignmentsPanel() {
         <ul className="flex flex-col gap-2">
           {sorted.map((a) => {
             const overdue = a.deadline && isPast(parseISO(a.deadline)) && a.status !== 'Completed';
-            const daysLeft = a.deadline && !overdue ? differenceInCalendarDays(parseISO(a.deadline), new Date()) : null;
+            const daysLeft =
+              a.deadline && !overdue && a.status !== 'Completed' ? differenceInCalendarDays(parseISO(a.deadline), new Date()) : null;
             const daysLeftLabel =
               daysLeft === null ? null : daysLeft === 0 ? 'Due today' : daysLeft === 1 ? '1 day left' : `${daysLeft} days left`;
             return (
